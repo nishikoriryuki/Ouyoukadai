@@ -11,8 +11,8 @@ public class DBUtil {
     private static final String USER =
             "root";
 
-    private static final String PASSWORD =
-            "marinL613399";
+    private static final String PASSWORD = 
+            "masaki";
 
     public static Connection getConnection()
             throws Exception {
