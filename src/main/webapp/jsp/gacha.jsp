@@ -3,9 +3,10 @@
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
-        <title>Insert title here</title>
+        <title>今日の献立ガチャ</title>
     </head>
     <body>
+        
 
     </body>
 </html>
