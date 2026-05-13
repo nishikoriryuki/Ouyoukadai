@@ -6,7 +6,7 @@
         <title>今日の献立ガチャ</title>
     </head>
     <body>
-        
+        <button method="POST" action="Doukigacha/ChooseServlet">ガチャを回す</button>
 
     </body>
 </html>
