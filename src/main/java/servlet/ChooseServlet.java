@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import dao.UserDAO;
-import model.User;
+import dao.KondateDAO;
+import model.Kondate;
 
 @WebServlet("/choose")
 public class ChooseServlet extends HttpServlet {
@@ -20,11 +20,11 @@ public class ChooseServlet extends HttpServlet {
             HttpServletResponse response
     ) throws ServletException, IOException {
 
-        UserDAO dao = new UserDAO();
+        KondateDAO dao = new KondateDAO();
 
-        User user = dao.chooseRandomUser();
+        Kondate kondate = dao.chooseRandomKondate();
 
-        request.setAttribute("user", user);
+        request.setAttribute("kondate", kondate);
 
         request.getRequestDispatcher(
                 "/jsp/result_gacha.jsp"
