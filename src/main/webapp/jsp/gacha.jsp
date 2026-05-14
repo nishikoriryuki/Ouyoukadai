@@ -6,7 +6,9 @@
         <title>今日の献立ガチャ</title>
     </head>
     <body>
-        <button method="POST" action="Doukigacha/ChooseServlet">ガチャを回す</button>
+        <form method="POST" action="/DoukiGacha/ChooseServlet">
+            <button type="submit">ガチャを回す</button>
+        </form>
 
     </body>
 </html>
