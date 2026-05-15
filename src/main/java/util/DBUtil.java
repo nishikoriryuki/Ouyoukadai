@@ -12,7 +12,7 @@ public class DBUtil {
             "root";
 
     private static final String PASSWORD =
-            "marinL613399";
+            "h.Tomoki4028";
 
     public static Connection getConnection()
             throws Exception {
@@ -27,4 +27,4 @@ public class DBUtil {
                 PASSWORD
         );
     }
-}
+}   
