@@ -4,15 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <title>今日の献立ガチャ</title>
-
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=2">
+    <style>
+        .allergy-container {
+            max-width: 420px;
+            margin: 20px auto;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            font-family: sans-serif;
+        }
+        .allergy-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .allergy-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .allergy-item {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .allergy-item input {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 
 <body>
 
     <section class="wrapper" id="gacha-wrapper">
         <div class="toy">
-            <svg x="0px" y="0px" viewBox="0 0 420 600">
+            <svg viewBox="0 0 420 600" width="100%" height="100%">
                 <g id="capsuletoy">
                     <path id="body" class="st0" d="M410,600H10c-5.5,0-10-4.5-10-10V50C0,22.4,22.4,0,50,0h320c27.6,0,50,22.4,50,50v540 C420,595.5,415.5,600,410,600z"/>
                     <path id="box" class="st1" d="M370,440H50c-27.6,0-50-22.4-50-50V70c0-27.6,22.4-50,50-50h320c27.6,0,50,22.4,50,50v320 C420,417.6,397.6,440,370,440z"/>
@@ -112,38 +141,32 @@
     </section>
 
     <form id="gacha-form" method="POST" action="/DoukiGacha/ChooseServlet">
+        <div class="allergy-container">
+            <div class="allergy-title">除外するアレルギーを選択</div>
+            <div class="allergy-grid">
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="egg">卵</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="milk">乳</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="wheat">小麦</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="shrimp">えび</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="crab">かに</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="peanut">落花生</label>
+            </div>
+        </div>
     </form>
 
     <script>
         let isSpinning = false;
-
         document.getElementById('handle').addEventListener('click', function() {
             if (isSpinning) return;
             isSpinning = true;
-            
-            // ===== ★ カプセルのランダム色変更処理 =====
-            // c1〜c9で使われている色のクラス名の配列（黒・水色・緑・紫・オレンジ・赤）
             const colors = ['st7', 'st8', 'st9', 'st10', 'st11', 'st12'];
-            
-            // 配列からランダムに1つの色クラスを選ぶ
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            
-            // 落ちてくるカプセル(c1)の色要素を取得
             const c1ColorElement = document.getElementById('c1-color');
-            
-            // 一旦既存の色クラス（st7〜st12）をすべて削除する
             colors.forEach(function(className) {
                 c1ColorElement.classList.remove(className);
             });
-            
-            // 新しく選ばれたランダムな色クラスを追加する
             c1ColorElement.classList.add(randomColor);
-            // ==========================================
-            
-            // アニメーション開始
             document.getElementById('gacha-wrapper').classList.add('act');
-            
-            // 1.5秒後にサーブレットへ送信
             setTimeout(function() {
                 document.getElementById('gacha-form').submit();
             }, 1500);

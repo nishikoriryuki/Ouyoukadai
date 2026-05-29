@@ -2,69 +2,47 @@
   position: relative;
   width: 100%;
   height: 100lvh;
-  min-height: 300px;
+  min-height: 550px; /* ボックスがはみ出さないように少し底上げ */
 }
 
+/* * ★ ガチャボックスのサイズ
+ * 他のスタイルに上書きされないよう !important をつけて確実に固定します。
+ */
 .toy {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  width: 210px;
-  height: 300px;
-  margin: auto auto;
+  width: 300px !important;  /* 210px から拡大 */
+  height: 450px !important; /* 300px から拡大 */
+  margin: auto !important;
 }
 
-svg {
+/* * ★ 内側のSVGが .toy（350x500）いっぱいに広がるように強制します
+ */
+.toy svg {
   display: block;
-  width: 100%;
-  height: 100%;
-}
-svg .st0 {
-  fill: #CCCCCC;
-}
-svg .st1 {
-  opacity: 0.18;
-}
-svg .st2 {
-  fill: #4D4D4D;
-}
-svg .st3 {
-  fill: #666666;
-}
-svg .st4 {
-  fill: #E6E6E6;
-}
-svg .st5 {
-  fill: #808080;
-}
-svg .st6 {
-  fill: #F2F2F2;
-}
-svg .st7 {
-  fill: #1A1A1A;
-}
-svg .st8 {
-  fill: #29ABE2;
-}
-svg .st9 {
-  fill: #22B573;
-}
-svg .st10 {
-  fill: #CC53FF;
-}
-svg .st11 {
-  fill: #FBB03B;
-}
-svg .st12 {
-  fill: #ED1C24;
-}
-svg .st13 {
-  opacity: 0.5;
-  fill: #FFFFFF;
+  width: 100% !important;
+  height: 100% !important;
 }
 
+svg .st0 { fill: #CCCCCC; }
+svg .st1 { opacity: 0.18; }
+svg .st2 { fill: #4D4D4D; }
+svg .st3 { fill: #666666; }
+svg .st4 { fill: #E6E6E6; }
+svg .st5 { fill: #808080; }
+svg .st6 { fill: #F2F2F2; }
+svg .st7 { fill: #1A1A1A; }
+svg .st8 { fill: #29ABE2; }
+svg .st9 { fill: #22B573; }
+svg .st10 { fill: #CC53FF; }
+svg .st11 { fill: #FBB03B; }
+svg .st12 { fill: #ED1C24; }
+svg .st13 { opacity: 0.5; fill: #FFFFFF; }
+
+/* アニメーション基準点（元のママ） */
 #c1 {
   opacity: 0;
   transform: scale(0.1) rotate(0);
@@ -72,89 +50,24 @@ svg .st13 {
   transition-delay: 1s;
   transition-duration: 300ms;
 }
+#c2 { transform: translate(0, 0) rotate(0); transform-origin: 210px 360px; transition-duration: 1s; }
+#c3 { transform: translate(0, 0) rotate(0); transform-origin: 120px 342px; transition-duration: 1s; }
+#c4 { transform: translate(0, 0) rotate(0); transform-origin: 320px 336px; transition-duration: 1s; }
+#c5 { transform: translate(0, 0) rotate(0); transform-origin: 233px 236px; transition-duration: 1s; }
+#c6 { transform: translate(0, 0) rotate(0); transform-origin: 346px 260px; transition-duration: 1s; }
+#c7 { transform: translate(0, 0) rotate(0); transform-origin: 84px 260px; transition-duration: 1s; }
+#c8 { transform: translate(0, 0) rotate(0); transform-origin: 157px 184px; transition-duration: 1s; }
+#c9 { transform: translate(0, 0) rotate(0); transform-origin: 305px 176px; transition-duration: 1s; }
+#handle { transform: rotate(0); transform-origin: 290px 518px; transition-duration: 1s; }
 
-#c2 {
-  transform: translate(0, 0) rotate(0);
-  transform-origin: 210px 360px;
-  transition-duration: 1s;
-}
-
-#c3 {
-  transform: translate(0, 0) rotate(0);
-  transform-origin: 120px 342px;
-  transition-duration: 1s;
-}
-
-#c4 {
-  transform: translate(0, 0) rotate(0);
-  transform-origin: 320px 336px;
-  transition-duration: 1s;
-}
-
-#c5 {
-  transform: translate(0, 0) rotate(0);
-  transform-origin: 233px 236px;
-  transition-duration: 1s;
-}
-
-#c6 {
-  transform: translate(0, 0) rotate(0);
-  transform-origin: 346px 260px;
-  transition-duration: 1s;
-}
-
-#c7 {
-  transform: translate(0, 0) rotate(0);
-  transform-origin: 84px 260px;
-  transition-duration: 1s;
-}
-
-#c8 {
-  transform: translate(0, 0) rotate(0);
-  transform-origin: 157px 184px;
-  transition-duration: 1s;
-}
-
-#c9 {
-  transform: translate(0, 0) rotate(0);
-  transform-origin: 305px 176px;
-  transition-duration: 1s;
-}
-
-#handle {
-  transform: rotate(0);
-  transform-origin: 290px 518px;
-  transition-duration: 1s;
-}
-
-.act #c1 {
-  opacity: 1;
-  transform: scale(1) rotate(360deg);
-}
-.act #c2 {
-  transform: translate(-18px, -20px) rotate(140deg);
-}
-.act #c3 {
-  transform: translate(-20px, -60px) rotate(-120deg);
-}
-.act #c4 {
-  transform: translate(-60px, -10px) rotate(120deg);
-}
-.act #c5 {
-  transform: translate(-10px, 70px) rotate(130deg);
-}
-.act #c6 {
-  transform: translate(0px, 26px) rotate(-90deg);
-}
-.act #c7 {
-  transform: translate(120px, -40px) rotate(90deg);
-}
-.act #c8 {
-  transform: translate(-50px, -24px) rotate(150deg);
-}
-.act #c9 {
-  transform: translate(8px, 30px) rotate(110deg);
-}
-.act #handle {
-  transform: rotate(360deg);
-}
+/* アニメーション挙動 */
+.act #c1 { opacity: 1; transform: scale(1) rotate(360deg); }
+.act #c2 { transform: translate(-18px, -20px) rotate(140deg); }
+.act #c3 { transform: translate(-20px, -60px) rotate(-120deg); }
+.act #c4 { transform: translate(-60px, -10px) rotate(120deg); }
+.act #c5 { transform: translate(-10px, 70px) rotate(130deg); }
+.act #c6 { transform: translate(0px, 26px) rotate(-90deg); }
+.act #c7 { transform: translate(120px, -40px) rotate(90deg); }
+.act #c8 { transform: translate(-50px, -24px) rotate(150deg); }
+.act #c9 { transform: translate(8px, 30px) rotate(110deg); }
+.act #handle { transform: rotate(360deg); }
