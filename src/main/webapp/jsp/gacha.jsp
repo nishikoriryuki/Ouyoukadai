@@ -140,7 +140,7 @@
         </div>
     </section>
 
-    <form id="gacha-form" method="POST" action="/DoukiGacha/ChooseServlet">
+    <form id="gacha-form" method="POST" action="/KondateGacha/ChooseServlet">
         <div class="allergy-container">
             <div class="allergy-title">除外するアレルギーを選択</div>
             <div class="allergy-grid">

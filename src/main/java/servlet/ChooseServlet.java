@@ -25,8 +25,11 @@ public class ChooseServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         KondateDAO dao = new KondateDAO();
+        
+        //アレルギーIDテスト
+        String[] allergyIds = {"2"};
 
-        Kondate kondate = dao.chooseRandomKondate();
+        Kondate kondate = dao.chooseRandomKondate(allergyIds);;
 
         request.setAttribute("kondate", kondate);
 

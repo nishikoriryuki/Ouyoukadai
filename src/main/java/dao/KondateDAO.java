@@ -3,20 +3,56 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Kondate;
 import util.DBUtil;
 
 public class KondateDAO {
 
-    public Kondate chooseRandomKondate() {
+    public Kondate chooseRandomKondate(String[] allergyIds) {
 
         Kondate kondate = null;
 
-        String sql =
-                "SELECT * FROM kondate " +
+        String sql;
+
+        // アレルギー未選択
+        if (allergyIds == null || allergyIds.length == 0) {
+
+            sql =
+                "SELECT * FROM menus " +
                 "ORDER BY RAND() " +
                 "LIMIT 1";
+
+        } else {
+
+            StringBuilder placeholders =
+                    new StringBuilder();
+
+            for (int i = 0; i < allergyIds.length; i++) {
+
+                placeholders.append("?");
+
+                if (i < allergyIds.length - 1) {
+                    placeholders.append(",");
+                }
+            }
+
+            sql =
+                "SELECT DISTINCT m.* " +
+                "FROM menus m " +
+                "WHERE m.menu_id NOT IN ( " +
+                "    SELECT mi.menu_id " +
+                "    FROM menu_ingredients mi " +
+                "    JOIN ingredient_allergens ia " +
+                "    ON mi.ingredient_id = ia.ingredient_id " +
+                "    WHERE ia.allergen_id IN (" +
+                        placeholders +
+                ") ) " +
+                "ORDER BY RAND() " +
+                "LIMIT 1";
+        }
 
         try (
             Connection conn =
@@ -24,37 +60,77 @@ public class KondateDAO {
 
             PreparedStatement ps =
                     conn.prepareStatement(sql);
-
-            ResultSet rs =
-                    ps.executeQuery();
         ) {
+
+            // プレースホルダへ値セット
+            if (allergyIds != null) {
+
+                for (int i = 0; i < allergyIds.length; i++) {
+
+                    ps.setInt(
+                            i + 1,
+                            Integer.parseInt(allergyIds[i])
+                    );
+                }
+            }
+
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
 
                 kondate = new Kondate();
 
                 kondate.setId(
-                        rs.getInt("id")
+                        rs.getInt("menu_id")
                 );
 
                 kondate.setName(
-                        rs.getString("name")
+                        rs.getString("menu_name")
                 );
 
                 kondate.setCalorie(
                         rs.getInt("calorie")
                 );
 
-                kondate.setIngredient(
-                        rs.getString("ingredient")
-                );
-
                 kondate.setDifficulty(
-                        rs.getString("difficulty")
+                        rs.getInt("difficulty")
                 );
 
-                kondate.setImage(
-                        rs.getString("image")
+                // 材料取得
+                String ingredientSql =
+                    "SELECT i.ingredient_name " +
+                    "FROM ingredients i " +
+                    "JOIN menu_ingredients mi " +
+                    "ON i.ingredient_id = mi.ingredient_id " +
+                    "WHERE mi.menu_id = ?";
+
+                PreparedStatement ingredientPs =
+                        conn.prepareStatement(
+                                ingredientSql
+                        );
+
+                ingredientPs.setInt(
+                        1,
+                        kondate.getId()
+                );
+
+                ResultSet ingredientRs =
+                        ingredientPs.executeQuery();
+
+                List<String> ingredientList =
+                        new ArrayList<>();
+
+                while (ingredientRs.next()) {
+
+                    ingredientList.add(
+                            ingredientRs.getString(
+                                    "ingredient_name"
+                            )
+                    );
+                }
+
+                kondate.setIngredients(
+                        ingredientList
                 );
             }
 

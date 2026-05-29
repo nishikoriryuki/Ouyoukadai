@@ -1,13 +1,15 @@
 package model;
 
+import java.util.List;
+
 public class Kondate {
 
     private int id;
     private String name;
     private int calorie;
-    private String ingredient;
-    private String difficulty;
-    private String image;
+    private int difficulty;
+    
+    private List<String> ingredients;
 
     public Kondate() {
     }
@@ -36,27 +38,19 @@ public class Kondate {
         this.calorie = calorie;
     }
 
-    public String getIngredient() {
-        return ingredient;
-    }
-
-    public void setIngredient(String ingredient) {
-        this.ingredient = ingredient;
-    }
-
-    public String getDifficulty() {
+    public int getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(String difficulty) {
+    public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
     }
-
-    public String getImage() {
-        return image;
+    
+    public List<String> getIngredients() {
+        return ingredients;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setIngredients(List<String> ingredients) {
+        this.ingredients = ingredients;
     }
 }
