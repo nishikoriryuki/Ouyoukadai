@@ -12,7 +12,7 @@ public class DBUtil {
             "root";
 
     private static final String PASSWORD =
-            "h.Tomoki4028";
+            "marinL613399";
 
     public static Connection getConnection()
             throws Exception {
