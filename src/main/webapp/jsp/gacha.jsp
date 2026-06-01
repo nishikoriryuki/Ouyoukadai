@@ -84,6 +84,25 @@
             transform: scale(1.2); /* チェックボックスを少し大きく */
             cursor: pointer;
         }
+        @keyframes goldGlow {
+
+            0% {
+                filter: drop-shadow(0 0 8px #ffd700);
+            }
+        
+            50% {
+                filter: drop-shadow(0 0 30px #fff176);
+            }
+        
+            100% {
+                filter: drop-shadow(0 0 8px #ffd700);
+            }
+        }
+        
+        .gold-capsule {
+        
+            animation: goldGlow 0.8s infinite;
+        }
     </style>
 </head>
 
@@ -94,6 +113,24 @@
     <section class="wrapper" id="gacha-wrapper">
         <div class="toy">
             <svg viewBox="0 0 420 600" width="100%" height="100%">
+                <defs>
+
+                    <linearGradient id="goldGradient"
+                                    x1="0%"
+                                    y1="0%"
+                                    x2="100%"
+                                    y2="100%">
+                
+                        <stop offset="0%" stop-color="#B67B03"/>
+                        <stop offset="45%" stop-color="#DAAF08"/>
+                        <stop offset="70%" stop-color="#FEE9A0"/>
+                        <stop offset="85%" stop-color="#DAAF08"/>
+                        <stop offset="100%" stop-color="#B67B03"/>
+                
+                    </linearGradient>
+                
+                </defs>
+            
                 <g id="capsuletoy">
                     <path id="body" class="st0" d="M410,600H10c-5.5,0-10-4.5-10-10V50C0,22.4,22.4,0,50,0h320c27.6,0,50,22.4,50,50v540 C420,595.5,415.5,600,410,600z"/>
                     <path id="box" class="st1" d="M370,440H50c-27.6,0-50-22.4-50-50V70c0-27.6,22.4-50,50-50h320c27.6,0,50,22.4,50,50v320 C420,417.6,397.6,440,370,440z"/>
@@ -178,7 +215,7 @@
                     <g>
                         <path class="st6" d="M115,466.7c-33.1,0-60,29.2-60,65.3c0,5,26.9,9,60,9s60-4,60-9C175,495.9,148.1,466.7,115,466.7z"/>
                         <ellipse class="st5" cx="115" cy="532" rx="60" ry="9"/>
-                        <circle class="st0" cx="115" cy="523" r="37"/>
+                        <circle id="c1-top" class="st0" cx="115" cy="523" r="37"/>
                         <path id="c1-color" class="st12" d="M115,541c-33.1,0-60-4-60-9c0,47.7,26.9,58,60,58s60-10.3,60-58C175,537,148.1,541,115,541z"/>
                     </g>
                 </g>
@@ -193,6 +230,11 @@
     </section>
 
     <form id="gacha-form" method="POST" action="/KondateGacha/ChooseServlet">
+    
+        <input type="hidden"
+           name="isGold"
+           id="isGold">
+        
         <div class="sidebar" id="sidebar">
             <div class="sidebar-title">除外するアレルギー</div>
             <div class="allergy-list">
@@ -239,12 +281,67 @@
 
             // 元のカラー演出処理
             const colors = ['st7', 'st8', 'st9', 'st10', 'st11', 'st12'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            const c1ColorElement = document.getElementById('c1-color');
+
+            const c1ColorElement =
+                    document.getElementById('c1-color');
+
             colors.forEach(function(className) {
                 c1ColorElement.classList.remove(className);
             });
-            c1ColorElement.classList.add(randomColor);
+
+            c1ColorElement.classList.remove('gold-capsule');
+
+            // 10%で金
+            const isGold = Math.random() < 0.1;
+
+            if(isGold){
+
+                document.getElementById('isGold').value = 'true';
+
+                c1ColorElement.setAttribute(
+                    "fill",
+                    "url(#goldGradient)"
+                );
+
+                document.getElementById(
+                    "c1-top"
+                ).setAttribute(
+                    "fill",
+                    "#FEE9A0"
+                );
+
+                c1ColorElement.classList.add(
+                    "gold-capsule"
+                );
+
+            }else{
+
+                document.getElementById('isGold').value = 'false';
+
+                // 金演出解除
+                c1ColorElement.classList.remove(
+                    'gold-capsule'
+                );
+
+                c1ColorElement.removeAttribute(
+                    'fill'
+                );
+
+                document.getElementById(
+                    'c1-top'
+                ).removeAttribute(
+                    'fill'
+                );
+
+                const randomColor =
+                    colors[Math.floor(
+                        Math.random() * colors.length
+                    )];
+
+                c1ColorElement.classList.add(
+                    randomColor
+                );
+            }
             
             // アニメーション用クラスを付与
             document.getElementById('gacha-wrapper').classList.add('act');

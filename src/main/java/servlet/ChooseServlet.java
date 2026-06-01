@@ -21,19 +21,58 @@ public class ChooseServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
         request.setCharacterEncoding("UTF-8");
 
         KondateDAO dao = new KondateDAO();
-        
-        //アレルギーIDテスト
+
+        // アレルギーIDテスト
         String[] allergyIds = {"2"};
 
-        Kondate kondate = dao.chooseRandomKondate(allergyIds);;
+        // gacha.jspから受け取る
+        String isGoldParam =
+                request.getParameter("isGold");
 
-        request.setAttribute("kondate", kondate);
+        boolean isGold =
+                "true".equals(isGoldParam);
 
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/result_gacha.jsp");
-        rd.forward(request, response);
+        System.out.println(
+                "金カプセル判定：" + isGold);
+
+        Kondate kondate;
+
+        if (isGold) {
+
+            kondate = dao.chooseRandomDifficultKondate(
+                    allergyIds);
+
+        } else {
+
+            kondate = dao.chooseRandomKondate(
+                    allergyIds);
+        }
+        
+        System.out.println(
+                "難易度：" +
+                kondate.getDifficulty());
+
+        request.setAttribute(
+                "kondate",
+                kondate);
+
+        request.setAttribute(
+                "isGold",
+                isGold);
+
+        RequestDispatcher rd =
+                request.getRequestDispatcher(
+                        "/WEB-INF/result_gacha.jsp");
+
+        rd.forward(
+                request,
+                response);
     }
 }
