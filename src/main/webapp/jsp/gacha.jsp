@@ -6,38 +6,90 @@
     <title>今日の献立ガチャ</title>
     <link rel="stylesheet" href="../css/style.css?v=2">
     <style>
-        .allergy-container {
-            max-width: 420px;
-            margin: 20px auto;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #f9f9f9;
+        /* --- 全体レイアウト（サイドバーのはみ出しを隠す設定） --- */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
             font-family: sans-serif;
         }
-        .allergy-title {
+
+        /* --- サイドバーを開くボタンのスタイル --- */
+        .sidebar-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.3s;
+        }
+        .sidebar-toggle:hover {
+            background-color: #fa5252;
+        }
+
+        /* --- サイドバー本体のスタイル --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px; /* 初期状態は画面の外に隠す */
+            width: 260px;
+            height: 100%;
+            background-color: #f8f9fa;
+            box-shadow: -4px 0 10px rgba(0,0,0,0.1);
+            z-index: 90;
+            transition: right 0.3s ease-in-out; /* スライドのアニメーション */
+            padding: 80px 20px 20px 20px; /* ボタンと重ならないように上部をあける */
+            box-sizing: border-box;
+        }
+
+        /* サイドバーが開いている状態のクラス */
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-title {
             font-size: 16px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             color: #333;
+            border-bottom: 2px solid #ff6b6b;
+            padding-bottom: 5px;
         }
-        .allergy-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+
+        /* --- チェックボックスリストのスタイル --- */
+        .allergy-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
         .allergy-item {
             display: flex;
             align-items: center;
+            font-size: 15px;
             cursor: pointer;
+            color: #495057;
+            padding: 4px 0;
         }
         .allergy-item input {
-            margin-right: 5px;
+            margin-right: 10px;
+            transform: scale(1.2); /* チェックボックスを少し大きく */
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
+
+    <button type="button" class="sidebar-toggle" id="toggle-btn">アレルギー設定 ⚙</button>
 
     <section class="wrapper" id="gacha-wrapper">
         <div class="toy">
@@ -141,24 +193,51 @@
     </section>
 
     <form id="gacha-form" method="POST" action="/KondateGacha/ChooseServlet">
-        <div class="allergy-container">
-            <div class="allergy-title">除外するアレルギーを選択</div>
-            <div class="allergy-grid">
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="egg">卵</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="milk">乳</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="wheat">小麦</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="shrimp">えび</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="crab">かに</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="peanut">落花生</label>
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-title">除外するアレルギー</div>
+            <div class="allergy-list">
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="1">卵</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="2">乳</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="3">小麦</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="4">えび</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="5">かに</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="6">落花生</label>
+                <label class="allergy-item"><input type="checkbox" name="allergies" value="7">そば</label>
             </div>
         </div>
     </form>
 
     <script>
+        // --- 1. サイドバーの開閉制御 ---
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+
+        toggleBtn.addEventListener('click', function(event) {
+            sidebar.classList.toggle('open');
+            if (sidebar.classList.contains('open')) {
+                toggleBtn.textContent = '閉じる ✖';
+            } else {
+                toggleBtn.textContent = 'アレルギー設定 ⚙';
+            }
+            event.stopPropagation();
+        });
+
+        // サイドバーの外側（全体）をクリックしたときに自動で閉じる
+        document.body.addEventListener('click', function(e) {
+            if (!sidebar.contains(e.target) && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                toggleBtn.textContent = 'アレルギー設定 ⚙';
+            }
+        });
+
+
+        // --- 2. 元のガチャの回転演出 ＆ 送信制御 ---
         let isSpinning = false;
         document.getElementById('handle').addEventListener('click', function() {
             if (isSpinning) return;
             isSpinning = true;
+
+            // 元のカラー演出処理
             const colors = ['st7', 'st8', 'st9', 'st10', 'st11', 'st12'];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             const c1ColorElement = document.getElementById('c1-color');
@@ -166,7 +245,11 @@
                 c1ColorElement.classList.remove(className);
             });
             c1ColorElement.classList.add(randomColor);
+            
+            // アニメーション用クラスを付与
             document.getElementById('gacha-wrapper').classList.add('act');
+            
+            // 1.5秒後にチェックボックスのデータと一緒にサーブレットに送信
             setTimeout(function() {
                 document.getElementById('gacha-form').submit();
             }, 1500);
