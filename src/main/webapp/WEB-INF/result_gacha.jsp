@@ -20,61 +20,96 @@
 
 </head>
 
-<body>
+<body class="
+    <c:choose>
+        <c:when test='${kondate.difficulty == 1}'>
+            easy-bg
+        </c:when>
 
+        <c:when test='${kondate.difficulty == 2}'>
+            normal-bg
+        </c:when>
+
+        <c:otherwise>
+            hard-bg
+        </c:otherwise>
+    </c:choose>
+">
+
+    <!-- 最初に大きく表示される料理名 -->
+    <div class="intro">
+        🍽 ${kondate.name}
+    </div>
+
+    <!-- カード -->
     <div class="card">
 
-        <div class="kondate_name">
-            <p>料理名：${kondate.name}</p>
-        </div>
-        
         <div class="kondate_ingredient">
-            <p>材料：</p>
+
+            <p>🥕 材料：</p>
+
             <ul>
                 <c:forEach var="ingredient"
-                   items="${kondate.ingredients}">
-                   <li>${ingredient}</li>
-               </c:forEach>
+                    items="${kondate.ingredients}">
+
+                    <li>${ingredient}</li>
+
+                </c:forEach>
             </ul>
+
         </div>
 
         <div class="kondate_calorie">
-            <p>1食分のカロリー：
+
+            <p>
+                🔥 1食分のカロリー：
                 ${kondate.calorie} kcal
             </p>
+
         </div>
 
         <div class="kondate_difficulty">
 
-            <p>
-                難易度：
+            <c:choose>
 
-                <c:choose>
+                <c:when test="${kondate.difficulty == 1}">
 
-                    <c:when test="${kondate.difficulty == 1}">
-                        簡単
-                    </c:when>
+                    <p class="easy">
+                        🟢 難易度：簡単
+                    </p>
 
-                    <c:when test="${kondate.difficulty == 2}">
-                        普通
-                    </c:when>
+                </c:when>
 
-                    <c:otherwise>
-                        難しい
-                    </c:otherwise>
+                <c:when test="${kondate.difficulty == 2}">
 
-                </c:choose>
+                    <p class="normal">
+                        🟠 難易度：普通
+                    </p>
 
-            </p>
+                </c:when>
+
+                <c:otherwise>
+
+                    <p class="hard">
+                        🔴 難易度：難しい
+                    </p>
+
+                </c:otherwise>
+
+            </c:choose>
 
         </div>
 
     </div>
 
+    <!-- 戻るボタン -->
+
     <p>
+
         <a href="<%= request.getContextPath() %>/jsp/gacha.jsp">
-            もどる
+            もう一度ガチャを回す
         </a>
+
     </p>
 
 </body>
