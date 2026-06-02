@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 
+
 <%
     User loginUser =
         (User) session.getAttribute("loginUser");
@@ -15,6 +16,10 @@
 %>
 
 
+<%@ taglib prefix="c" uri="jakarta.tags.core" %> 
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+
+=======
 <%@ taglib prefix="c" uri="jakarta.tags.core" %> 
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
@@ -205,8 +210,14 @@
 
     <form id="gacha-form" method="POST" action="${pageContext.request.contextPath}/ChooseServlet">
     
+<<<<<<< HEAD
         <input type="hidden"name="isGold"id="isGold">
         <input type="hidden" name="allergies" id="hiddenAllergies">
+=======
+        <input type="hidden"
+           name="isGold"
+           id="isGold">
+>>>>>>> stash
         <div class="sidebar" id="sidebar">
             <div class="sidebar-title">除外するアレルギー</div>
             <div class="allergy-list">
@@ -248,7 +259,11 @@
                     <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
                         <c:if test="${prev == '5'}"><c:set var="isChecked" value="true" /></c:if>
                     </c:forEach>
+<<<<<<< HEAD
                     <input type="checkbox" name="allergies" value="5" ${isChecked ? 'checked' : ''}>大豆
+=======
+                    <input type="checkbox" name="allergies" value="5" ${isChecked ? 'checked' : ''}>かに
+>>>>>>> stash
                 </label>
 
                 <label class="allergy-item">

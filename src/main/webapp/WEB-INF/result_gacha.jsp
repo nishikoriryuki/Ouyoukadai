@@ -123,6 +123,7 @@
         <a href="javascript:void(0);" onclick="document.getElementById('back-gacha-form').submit();">
             もう一度ガチャを回す
         </a>
+
     </p>
     
 </body>
