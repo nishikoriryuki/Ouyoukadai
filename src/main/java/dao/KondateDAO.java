@@ -22,7 +22,7 @@ public class KondateDAO {
 
             sql =
                 "SELECT * FROM menus " +
-                "ORDER BY RAND() " +
+                "ORDER BY RANDOM() " +
                 "LIMIT 1";
 
         } else {
@@ -50,7 +50,7 @@ public class KondateDAO {
                 "    WHERE ia.allergen_id IN (" +
                         placeholders +
                 ") ) " +
-                "ORDER BY RAND() " +
+                "ORDER BY RANDOM() " +
                 "LIMIT 1";
         }
 
@@ -154,7 +154,7 @@ public class KondateDAO {
             sql =
                 "SELECT * FROM menus " +
                 "WHERE difficulty = 3 " +
-                "ORDER BY RAND() " +
+                "ORDER BY RANDOM() " +
                 "LIMIT 1";
 
         } else {
@@ -183,7 +183,7 @@ public class KondateDAO {
                 "    WHERE ia.allergen_id IN (" +
                         placeholders +
                 ") ) " +
-                "ORDER BY RAND() " +
+                "ORDER BY RANDOM() " +
                 "LIMIT 1";
         }
 
