@@ -10,6 +10,8 @@ FROM tomcat:10.1-jdk21-temurin
 
 COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 
+COPY db/kondate.db /usr/local/tomcat/db/kondate.db
+
 EXPOSE 8080
 
 CMD ["catalina.sh", "run"]
