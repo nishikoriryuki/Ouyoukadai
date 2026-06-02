@@ -1,5 +1,6 @@
 <%@ page import="model.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<<<<<<< HEAD
 
 <%
     User loginUser =
@@ -13,6 +14,10 @@
     }
 %>
 
+=======
+<%@ taglib prefix="c" uri="jakarta.tags.core" %> 
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+>>>>>>> stash
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -29,75 +34,7 @@
             font-family: sans-serif;
         }
 
-        /* --- サイドバーを開くボタンのスタイル --- */
-        .sidebar-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: background 0.3s;
-        }
-        .sidebar-toggle:hover {
-            background-color: #fa5252;
-        }
-
-        /* --- サイドバー本体のスタイル --- */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -300px; /* 初期状態は画面の外に隠す */
-            width: 260px;
-            height: 100%;
-            background-color: #f8f9fa;
-            box-shadow: -4px 0 10px rgba(0,0,0,0.1);
-            z-index: 90;
-            transition: right 0.3s ease-in-out; /* スライドのアニメーション */
-            padding: 80px 20px 20px 20px; /* ボタンと重ならないように上部をあける */
-            box-sizing: border-box;
-        }
-
-        /* サイドバーが開いている状態のクラス */
-        .sidebar.open {
-            right: 0;
-        }
-
-        .sidebar-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-            border-bottom: 2px solid #ff6b6b;
-            padding-bottom: 5px;
-        }
-
-        /* --- チェックボックスリストのスタイル --- */
-        .allergy-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .allergy-item {
-            display: flex;
-            align-items: center;
-            font-size: 15px;
-            cursor: pointer;
-            color: #495057;
-            padding: 4px 0;
-        }
-        .allergy-item input {
-            margin-right: 10px;
-            transform: scale(1.2); /* チェックボックスを少し大きく */
-            cursor: pointer;
-        }
+        
         @keyframes goldGlow {
 
             0% {
@@ -268,20 +205,68 @@
 
     <form id="gacha-form" method="POST" action="${pageContext.request.contextPath}/ChooseServlet">
     
-        <input type="hidden"
-           name="isGold"
-           id="isGold">
-        
+        <input type="hidden"name="isGold"id="isGold">
+        <input type="hidden" name="allergies" id="hiddenAllergies">
         <div class="sidebar" id="sidebar">
             <div class="sidebar-title">除外するアレルギー</div>
             <div class="allergy-list">
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="1">卵</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="2">乳</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="3">小麦</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="4">えび</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="5">かに</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="6">落花生</label>
-                <label class="allergy-item"><input type="checkbox" name="allergies" value="7">そば</label>
+                
+                <label class="allergy-item">
+                    <c:set var="isChecked" value="false" />
+                    <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
+                        <c:if test="${prev == '1'}"><c:set var="isChecked" value="true" /></c:if>
+                    </c:forEach>
+                    <input type="checkbox" name="allergies" value="1" ${isChecked ? 'checked' : ''}>卵
+                </label>
+
+                <label class="allergy-item">
+                    <c:set var="isChecked" value="false" />
+                    <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
+                        <c:if test="${prev == '2'}"><c:set var="isChecked" value="true" /></c:if>
+                    </c:forEach>
+                    <input type="checkbox" name="allergies" value="2" ${isChecked ? 'checked' : ''}>乳
+                </label>
+
+                <label class="allergy-item">
+                    <c:set var="isChecked" value="false" />
+                    <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
+                        <c:if test="${prev == '3'}"><c:set var="isChecked" value="true" /></c:if>
+                    </c:forEach>
+                    <input type="checkbox" name="allergies" value="3" ${isChecked ? 'checked' : ''}>小麦
+                </label>
+
+                <label class="allergy-item">
+                    <c:set var="isChecked" value="false" />
+                    <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
+                        <c:if test="${prev == '4'}"><c:set var="isChecked" value="true" /></c:if>
+                    </c:forEach>
+                    <input type="checkbox" name="allergies" value="4" ${isChecked ? 'checked' : ''}>えび
+                </label>
+
+                <label class="allergy-item">
+                    <c:set var="isChecked" value="false" />
+                    <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
+                        <c:if test="${prev == '5'}"><c:set var="isChecked" value="true" /></c:if>
+                    </c:forEach>
+                    <input type="checkbox" name="allergies" value="5" ${isChecked ? 'checked' : ''}>大豆
+                </label>
+
+                <label class="allergy-item">
+                    <c:set var="isChecked" value="false" />
+                    <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
+                        <c:if test="${prev == '6'}"><c:set var="isChecked" value="true" /></c:if>
+                    </c:forEach>
+                    <input type="checkbox" name="allergies" value="6" ${isChecked ? 'checked' : ''}>落花生
+                </label>
+
+                <label class="allergy-item">
+                    <c:set var="isChecked" value="false" />
+                    <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
+                        <c:if test="${prev == '7'}"><c:set var="isChecked" value="true" /></c:if>
+                    </c:forEach>
+                    <input type="checkbox" name="allergies" value="7" ${isChecked ? 'checked' : ''}>そば
+                </label>
+
             </div>
         </div>
     </form>
@@ -382,6 +367,16 @@
             
             // アニメーション用クラスを付与
             document.getElementById('gacha-wrapper').classList.add('act');
+
+
+         // ★送信直前に、チェックが入っているアレルギーIDをかき集める処理を追加
+            const checkedBoxes = document.querySelectorAll('input[name="allergies"]:checked');
+            const checkedValues = Array.from(checkedBoxes).map(cb => cb.value);
+            
+            // 隠しパラメータに「1,2」のようにカンマ区切りでセットするか、
+            // もしくは一時的にチェックボックスのname属性を維持して確実に届くようにする
+            // 一番安全なのは、サイドバーのクラスを送信直前だけ一瞬 'open' に固定することです
+            sidebar.style.display = 'block'; // 送信の瞬間だけ物理的に存在させる
             
             // 1.5秒後にチェックボックスのデータと一緒にサーブレットに送信
             setTimeout(function() {

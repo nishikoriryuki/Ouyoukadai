@@ -8,8 +8,15 @@ public class DBUtil {
     private static final String URL_LOCAL =
             "jdbc:sqlite:db/kondate.db";
 
+
     private static final String URL_RENDER =
             "jdbc:sqlite:/usr/local/tomcat/db/kondate.db";
+
+    private static final String USER =
+            "root";
+
+    private static final String PASSWORD =
+            "marinL613399";
 
     public static Connection getConnection()
             throws Exception {

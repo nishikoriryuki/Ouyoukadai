@@ -71,3 +71,73 @@ svg .st13 { opacity: 0.5; fill: #FFFFFF; }
 .act #c8 { transform: translate(-50px, -24px) rotate(150deg); }
 .act #c9 { transform: translate(8px, 30px) rotate(110deg); }
 .act #handle { transform: rotate(360deg); }
+
+/* --- サイドバーを開くボタンのスタイル --- */
+        .sidebar-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.3s;
+        }
+        .sidebar-toggle:hover {
+            background-color: #fa5252;
+        }
+
+        /* --- サイドバー本体のスタイル --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px; /* 初期状態は画面の外に隠す */
+            width: 260px;
+            height: 100%;
+            background-color: #f8f9fa;
+            box-shadow: -4px 0 10px rgba(0,0,0,0.1);
+            z-index: 90;
+            transition: right 0.3s ease-in-out; /* スライドのアニメーション */
+            padding: 80px 20px 20px 20px; /* ボタンと重ならないように上部をあける */
+            box-sizing: border-box;
+        }
+
+        /* サイドバーが開いている状態のクラス */
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #ff6b6b;
+            padding-bottom: 5px;
+        }
+
+        /* --- チェックボックスリストのスタイル --- */
+        .allergy-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .allergy-item {
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            cursor: pointer;
+            color: #495057;
+            padding: 4px 0;
+        }
+        .allergy-item input {
+            margin-right: 10px;
+            transform: scale(1.2); /* チェックボックスを少し大きく */
+            cursor: pointer;
+        }

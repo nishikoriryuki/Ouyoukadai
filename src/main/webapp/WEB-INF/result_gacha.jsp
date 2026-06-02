@@ -106,12 +106,25 @@
 
     <p>
 
-        <a href="<%= request.getContextPath() %>/jsp/gacha.jsp">
+       <form id="back-gacha-form" action="<%= request.getContextPath() %>/jsp/gacha.jsp" method="POST" style="display:none;">
+        <c:forEach var="id" items="${selectedAllergies}">
+            <input type="hidden" name="prevAllergies" value="${id}">
+        </c:forEach>
+    </form>
+
+    <p>
+    <form id="back-gacha-form" action="<%= request.getContextPath() %>/jsp/gacha.jsp" method="POST" style="display:none;">
+        <c:forEach var="id" items="${selectedAllergies}">
+            <input type="hidden" name="prevAllergies" value="${id}">
+        </c:forEach>
+    </form>
+
+    <p>
+        <a href="javascript:void(0);" onclick="document.getElementById('back-gacha-form').submit();">
             もう一度ガチャを回す
         </a>
-
     </p>
-
+    
 </body>
 
 </html>
