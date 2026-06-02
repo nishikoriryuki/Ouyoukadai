@@ -1,4 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%
+    User loginUser =
+        (User) session.getAttribute("loginUser");
+
+    if (loginUser == null) {
+        response.sendRedirect(
+            request.getContextPath()
+            + "/jsp/login.jsp");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -107,6 +120,29 @@
 </head>
 
 <body>
+
+    <div style="
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 999;
+        background: white;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    ">
+    
+        <div>
+            ようこそ
+            <%= loginUser.getUserName() %>
+            さん
+        </div>
+
+    <a href="<%= request.getContextPath() %>/LogoutServlet">
+        ログアウト
+    </a>
+
+</div>
 
     <button type="button" class="sidebar-toggle" id="toggle-btn">アレルギー設定 ⚙</button>
 
