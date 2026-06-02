@@ -229,7 +229,7 @@
         </div>
     </section>
 
-    <form id="gacha-form" method="POST" action="/KondateGacha/ChooseServlet">
+    <form id="gacha-form" method="POST" action="${pageContext.request.contextPath}/ChooseServlet">
     
         <input type="hidden"
            name="isGold"
