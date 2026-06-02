@@ -6,34 +6,53 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ユーザー登録</title>
+<title>新規登録</title>
+
+<link rel="stylesheet"
+      href="<%=request.getContextPath()%>/css/register.css">
+
 </head>
 <body>
 
-<h1>ユーザー登録</h1>
+<div class="register-container">
 
-<form action="<%= request.getContextPath() %>/RegisterServlet"
-      method="post">
+    <div class="register-title">
+        🍳 ユーザー登録
+    </div>
 
-    <p>
-        ユーザー名：
-        <input type="text" name="userName">
-    </p>
+    <form action="<%=request.getContextPath()%>/RegisterServlet"
+          method="post">
 
-    <p>
-        パスワード：
-        <input type="password" name="password">
-    </p>
+        <div class="form-group">
+            <label>ユーザー名</label>
+            <input type="text"
+                   name="userName"
+                   required>
+        </div>
 
-    <button type="submit">登録</button>
+        <div class="form-group">
+            <label>パスワード</label>
+            <input type="password"
+                   name="password"
+                   required>
+        </div>
 
-</form>
+        <button type="submit"
+                class="register-btn">
+            登録する
+        </button>
 
-<p>
-    <a href="<%= request.getContextPath() %>/jsp/login.jsp">
-        ログイン画面へ
-    </a>
-</p>
+    </form>
+
+    <div class="link-area">
+
+        <a href="<%=request.getContextPath()%>/jsp/login.jsp">
+            ログイン画面へ戻る
+        </a>
+
+    </div>
+
+</div>
 
 </body>
 </html>

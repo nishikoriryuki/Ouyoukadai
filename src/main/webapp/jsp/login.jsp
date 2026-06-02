@@ -1,43 +1,61 @@
-<%@ page language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>ログイン</title>
+
+<link rel="stylesheet"
+      href="<%=request.getContextPath()%>/css/login.css">
+
 </head>
 <body>
 
-<h1>ログイン</h1>
+<div class="login-container">
 
-<p style="color:red;">
-    ${errorMsg}
-</p>
+    <div class="login-title">
+        🎲 今日の献立ガチャ
+    </div>
 
-<form action="<%= request.getContextPath() %>/LoginServlet"
-      method="post">
+    <form action="<%=request.getContextPath()%>/LoginServlet"
+          method="post">
 
-    <p>
-        ユーザー名：
-        <input type="text" name="userName">
-    </p>
+        <div class="form-group">
 
-    <p>
-        パスワード：
-        <input type="password" name="password">
-    </p>
+            <label>ユーザー名</label>
 
-    <button type="submit">ログイン</button>
+            <input type="text"
+                   name="userName"
+                   required>
 
-</form>
+        </div>
 
-<p>
-    <a href="<%= request.getContextPath() %>/jsp/register.jsp">
-        新規登録はこちら
-    </a>
-</p>
+        <div class="form-group">
+
+            <label>パスワード</label>
+
+            <input type="password"
+                   name="password"
+                   required>
+
+        </div>
+
+        <button class="login-btn"
+                type="submit">
+
+            ログイン
+        </button>
+
+    </form>
+
+    <div class="link-area">
+
+        <a href="<%=request.getContextPath()%>/jsp/register.jsp">
+            新規登録はこちら
+        </a>
+
+    </div>
+
+</div>
 
 </body>
 </html>

@@ -1,0 +1,133 @@
+body {
+    margin: 0;
+    padding: 0;
+
+    background: linear-gradient(
+        135deg,
+        #e3fcef,
+        #b2f2bb
+    );
+
+    font-family: "Yu Gothic", sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+}
+
+.register-container {
+
+    width: 400px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 40px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.2);
+
+    text-align: center;
+}
+
+.register-title {
+
+    font-size: 32px;
+    font-weight: bold;
+
+    color: #2f9e44;
+
+    margin-bottom: 30px;
+}
+
+.form-group {
+
+    margin-bottom: 20px;
+
+    text-align: left;
+}
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-weight: bold;
+
+    color: #333;
+}
+
+.form-group input {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border: 2px solid #ddd;
+
+    border-radius: 10px;
+
+    box-sizing: border-box;
+
+    font-size: 16px;
+}
+
+.form-group input:focus {
+
+    outline: none;
+
+    border-color: #51cf66;
+}
+
+.register-btn {
+
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #51cf66;
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.register-btn:hover {
+
+    background: #40c057;
+
+    transform: translateY(-2px);
+}
+
+.link-area {
+
+    margin-top: 20px;
+}
+
+.link-area a {
+
+    color: #2f9e44;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+.link-area a:hover {
+
+    text-decoration: underline;
+}
