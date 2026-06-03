@@ -14,11 +14,20 @@ public class KondateDAO {
     public Kondate chooseRandomKondate(String[] allergyIds) {
 
         Kondate kondate = null;
-
         String sql;
 
-        // アレルギー未選択
-        if (allergyIds == null || allergyIds.length == 0) {
+        // ⭐【追加】空文字やnullを除外した有効なIDだけのリストを作成
+        List<Integer> validAllergyIds = new ArrayList<>();
+        if (allergyIds != null) {
+            for (String idStr : allergyIds) {
+                if (idStr != null && !idStr.trim().isEmpty()) {
+                    validAllergyIds.add(Integer.parseInt(idStr));
+                }
+            }
+        }
+
+        // アレルギー未選択（有効なIDが1つもない場合）
+        if (validAllergyIds.isEmpty()) {
 
             sql =
                 "SELECT * FROM menus " +
@@ -27,14 +36,11 @@ public class KondateDAO {
 
         } else {
 
-            StringBuilder placeholders =
-                    new StringBuilder();
-
-            for (int i = 0; i < allergyIds.length; i++) {
-
+            StringBuilder placeholders = new StringBuilder();
+            // ⭐ 有効なIDの数だけプレースホルダを生成
+            for (int i = 0; i < validAllergyIds.size(); i++) {
                 placeholders.append("?");
-
-                if (i < allergyIds.length - 1) {
+                if (i < validAllergyIds.size() - 1) {
                     placeholders.append(",");
                 }
             }
@@ -55,22 +61,14 @@ public class KondateDAO {
         }
 
         try (
-            Connection conn =
-                    DBUtil.getConnection();
-
-            PreparedStatement ps =
-                    conn.prepareStatement(sql);
+            Connection conn = DBUtil.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
         ) {
 
-            // プレースホルダへ値セット
-            if (allergyIds != null) {
-
-                for (int i = 0; i < allergyIds.length; i++) {
-
-                    ps.setInt(
-                            i + 1,
-                            Integer.parseInt(allergyIds[i])
-                    );
+            // ⭐ プレースホルダへ値をセット（有効なリストから順に入れる）
+            if (!validAllergyIds.isEmpty()) {
+                for (int i = 0; i < validAllergyIds.size(); i++) {
+                    ps.setInt(i + 1, validAllergyIds.get(i));
                 }
             }
 
@@ -79,22 +77,10 @@ public class KondateDAO {
             if (rs.next()) {
 
                 kondate = new Kondate();
-
-                kondate.setId(
-                        rs.getInt("menu_id")
-                );
-
-                kondate.setName(
-                        rs.getString("menu_name")
-                );
-
-                kondate.setCalorie(
-                        rs.getInt("calorie")
-                );
-
-                kondate.setDifficulty(
-                        rs.getInt("difficulty")
-                );
+                kondate.setId(rs.getInt("menu_id"));
+                kondate.setName(rs.getString("menu_name"));
+                kondate.setCalorie(rs.getInt("calorie"));
+                kondate.setDifficulty(rs.getInt("difficulty"));
 
                 // 材料取得
                 String ingredientSql =
@@ -104,40 +90,20 @@ public class KondateDAO {
                     "ON i.ingredient_id = mi.ingredient_id " +
                     "WHERE mi.menu_id = ?";
 
-                PreparedStatement ingredientPs =
-                        conn.prepareStatement(
-                                ingredientSql
-                        );
-
-                ingredientPs.setInt(
-                        1,
-                        kondate.getId()
-                );
-
-                ResultSet ingredientRs =
-                        ingredientPs.executeQuery();
-
-                List<String> ingredientList =
-                        new ArrayList<>();
-
-                while (ingredientRs.next()) {
-
-                    ingredientList.add(
-                            ingredientRs.getString(
-                                    "ingredient_name"
-                            )
-                    );
+                try (PreparedStatement ingredientPs = conn.prepareStatement(ingredientSql)) {
+                    ingredientPs.setInt(1, kondate.getId());
+                    try (ResultSet ingredientRs = ingredientPs.executeQuery()) {
+                        List<String> ingredientList = new ArrayList<>();
+                        while (ingredientRs.next()) {
+                            ingredientList.add(ingredientRs.getString("ingredient_name"));
+                        }
+                        kondate.setIngredients(ingredientList);
+                    }
                 }
-
-                kondate.setIngredients(
-                        ingredientList
-                );
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
 
         return kondate;
@@ -146,10 +112,20 @@ public class KondateDAO {
     public Kondate chooseRandomDifficultKondate(String[] allergyIds) {
 
         Kondate kondate = null;
-
         String sql;
 
-        if (allergyIds == null || allergyIds.length == 0) {
+        // ⭐【追加】空文字やnullを除外した有効なIDだけのリストを作成
+        List<Integer> validAllergyIds = new ArrayList<>();
+        if (allergyIds != null) {
+            for (String idStr : allergyIds) {
+                if (idStr != null && !idStr.trim().isEmpty()) {
+                    validAllergyIds.add(Integer.parseInt(idStr));
+                }
+            }
+        }
+
+        // アレルギー未選択（有効なIDが1つもない場合）
+        if (validAllergyIds.isEmpty()) {
 
             sql =
                 "SELECT * FROM menus " +
@@ -159,14 +135,11 @@ public class KondateDAO {
 
         } else {
 
-            StringBuilder placeholders =
-                    new StringBuilder();
-
-            for (int i = 0; i < allergyIds.length; i++) {
-
+            StringBuilder placeholders = new StringBuilder();
+            // ⭐ 有効なIDの数だけプレースホルダを生成
+            for (int i = 0; i < validAllergyIds.size(); i++) {
                 placeholders.append("?");
-
-                if (i < allergyIds.length - 1) {
+                if (i < validAllergyIds.size() - 1) {
                     placeholders.append(",");
                 }
             }
@@ -188,21 +161,14 @@ public class KondateDAO {
         }
 
         try (
-            Connection conn =
-                    DBUtil.getConnection();
-
-            PreparedStatement ps =
-                    conn.prepareStatement(sql);
+            Connection conn = DBUtil.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
         ) {
 
-            if (allergyIds != null) {
-
-                for (int i = 0; i < allergyIds.length; i++) {
-
-                    ps.setInt(
-                            i + 1,
-                            Integer.parseInt(allergyIds[i])
-                    );
+            // ⭐ プレースホルダへ値をセット（有効なリストから順に入れる）
+            if (!validAllergyIds.isEmpty()) {
+                for (int i = 0; i < validAllergyIds.size(); i++) {
+                    ps.setInt(i + 1, validAllergyIds.get(i));
                 }
             }
 
@@ -211,22 +177,10 @@ public class KondateDAO {
             if (rs.next()) {
 
                 kondate = new Kondate();
-
-                kondate.setId(
-                        rs.getInt("menu_id")
-                );
-
-                kondate.setName(
-                        rs.getString("menu_name")
-                );
-
-                kondate.setCalorie(
-                        rs.getInt("calorie")
-                );
-
-                kondate.setDifficulty(
-                        rs.getInt("difficulty")
-                );
+                kondate.setId(rs.getInt("menu_id"));
+                kondate.setName(rs.getString("menu_name"));
+                kondate.setCalorie(rs.getInt("calorie"));
+                kondate.setDifficulty(rs.getInt("difficulty"));
 
                 String ingredientSql =
                     "SELECT i.ingredient_name " +
@@ -235,43 +189,22 @@ public class KondateDAO {
                     "ON i.ingredient_id = mi.ingredient_id " +
                     "WHERE mi.menu_id = ?";
 
-                PreparedStatement ingredientPs =
-                        conn.prepareStatement(
-                                ingredientSql
-                        );
-
-                ingredientPs.setInt(
-                        1,
-                        kondate.getId()
-                );
-
-                ResultSet ingredientRs =
-                        ingredientPs.executeQuery();
-
-                List<String> ingredientList =
-                        new ArrayList<>();
-
-                while (ingredientRs.next()) {
-
-                    ingredientList.add(
-                            ingredientRs.getString(
-                                    "ingredient_name"
-                            )
-                    );
+                try (PreparedStatement ingredientPs = conn.prepareStatement(ingredientSql)) {
+                    ingredientPs.setInt(1, kondate.getId());
+                    try (ResultSet ingredientRs = ingredientPs.executeQuery()) {
+                        List<String> ingredientList = new ArrayList<>();
+                        while (ingredientRs.next()) {
+                            ingredientList.add(ingredientRs.getString("ingredient_name"));
+                        }
+                        kondate.setIngredients(ingredientList);
+                    }
                 }
-
-                kondate.setIngredients(
-                        ingredientList
-                );
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
 
         return kondate;
     }
-    
 }
