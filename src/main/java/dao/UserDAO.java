@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 
 import model.User;
 import util.DBUtil;
+import util.PasswordUtil;
 
 public class UserDAO {
 
@@ -25,7 +26,10 @@ public class UserDAO {
         ) {
 
             pstmt.setString(1, user.getUserName());
-            pstmt.setString(2, user.getPassword());
+            String hashedPassword =
+                    PasswordUtil.hashPassword(user.getPassword());
+
+            pstmt.setString(2, hashedPassword);
 
             int result = pstmt.executeUpdate();
 
@@ -46,8 +50,7 @@ public class UserDAO {
 
         String sql =
                 "SELECT * FROM users "
-              + "WHERE user_name = ? "
-              + "AND password = ?";
+              + "WHERE user_name = ?";
 
         try (
             Connection conn = DBUtil.getConnection();
@@ -56,23 +59,27 @@ public class UserDAO {
         ) {
 
             pstmt.setString(1, userName);
-            pstmt.setString(2, password);
 
             ResultSet rs =
                     pstmt.executeQuery();
 
             if (rs.next()) {
 
+                String storedPassword =
+                        rs.getString("password");
+
+                if (!PasswordUtil.checkPassword(
+                        password,
+                        storedPassword)) {
+
+                    return null;
+                }
+
                 User user = new User();
 
-                user.setUserId(
-                        rs.getInt("user_id"));
-
-                user.setUserName(
-                        rs.getString("user_name"));
-
-                user.setPassword(
-                        rs.getString("password"));
+                user.setUserId(rs.getInt("user_id"));
+                user.setUserName(rs.getString("user_name"));
+                user.setPassword(storedPassword);
 
                 return user;
             }
