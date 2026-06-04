@@ -16,7 +16,6 @@ public class KondateDAO {
         Kondate kondate = null;
         String sql;
 
-        // ⭐【追加】空文字やnullを除外した有効なIDだけのリストを作成
         List<Integer> validAllergyIds = new ArrayList<>();
         if (allergyIds != null) {
             for (String idStr : allergyIds) {
@@ -26,7 +25,6 @@ public class KondateDAO {
             }
         }
 
-        // アレルギー未選択（有効なIDが1つもない場合）
         if (validAllergyIds.isEmpty()) {
 
             sql =
@@ -37,7 +35,6 @@ public class KondateDAO {
         } else {
 
             StringBuilder placeholders = new StringBuilder();
-            // ⭐ 有効なIDの数だけプレースホルダを生成
             for (int i = 0; i < validAllergyIds.size(); i++) {
                 placeholders.append("?");
                 if (i < validAllergyIds.size() - 1) {
@@ -65,7 +62,6 @@ public class KondateDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
         ) {
 
-            // ⭐ プレースホルダへ値をセット（有効なリストから順に入れる）
             if (!validAllergyIds.isEmpty()) {
                 for (int i = 0; i < validAllergyIds.size(); i++) {
                     ps.setInt(i + 1, validAllergyIds.get(i));
@@ -82,7 +78,9 @@ public class KondateDAO {
                 kondate.setCalorie(rs.getInt("calorie"));
                 kondate.setDifficulty(rs.getInt("difficulty"));
 
-                // 材料取得
+                // ⭐ ここ追加（画像URL）
+                kondate.setImageUrl(rs.getString("image_url"));
+
                 String ingredientSql =
                     "SELECT i.ingredient_name " +
                     "FROM ingredients i " +
@@ -92,11 +90,16 @@ public class KondateDAO {
 
                 try (PreparedStatement ingredientPs = conn.prepareStatement(ingredientSql)) {
                     ingredientPs.setInt(1, kondate.getId());
+
                     try (ResultSet ingredientRs = ingredientPs.executeQuery()) {
                         List<String> ingredientList = new ArrayList<>();
+
                         while (ingredientRs.next()) {
-                            ingredientList.add(ingredientRs.getString("ingredient_name"));
+                            ingredientList.add(
+                                ingredientRs.getString("ingredient_name")
+                            );
                         }
+
                         kondate.setIngredients(ingredientList);
                     }
                 }
@@ -108,13 +111,12 @@ public class KondateDAO {
 
         return kondate;
     }
-    
+
     public Kondate chooseRandomDifficultKondate(String[] allergyIds) {
 
         Kondate kondate = null;
         String sql;
 
-        // ⭐【追加】空文字やnullを除外した有効なIDだけのリストを作成
         List<Integer> validAllergyIds = new ArrayList<>();
         if (allergyIds != null) {
             for (String idStr : allergyIds) {
@@ -124,7 +126,6 @@ public class KondateDAO {
             }
         }
 
-        // アレルギー未選択（有効なIDが1つもない場合）
         if (validAllergyIds.isEmpty()) {
 
             sql =
@@ -136,7 +137,6 @@ public class KondateDAO {
         } else {
 
             StringBuilder placeholders = new StringBuilder();
-            // ⭐ 有効なIDの数だけプレースホルダを生成
             for (int i = 0; i < validAllergyIds.size(); i++) {
                 placeholders.append("?");
                 if (i < validAllergyIds.size() - 1) {
@@ -165,7 +165,6 @@ public class KondateDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
         ) {
 
-            // ⭐ プレースホルダへ値をセット（有効なリストから順に入れる）
             if (!validAllergyIds.isEmpty()) {
                 for (int i = 0; i < validAllergyIds.size(); i++) {
                     ps.setInt(i + 1, validAllergyIds.get(i));
@@ -182,6 +181,9 @@ public class KondateDAO {
                 kondate.setCalorie(rs.getInt("calorie"));
                 kondate.setDifficulty(rs.getInt("difficulty"));
 
+                // ⭐ ここも追加（画像URL）
+                kondate.setImageUrl(rs.getString("image_url"));
+
                 String ingredientSql =
                     "SELECT i.ingredient_name " +
                     "FROM ingredients i " +
@@ -191,11 +193,16 @@ public class KondateDAO {
 
                 try (PreparedStatement ingredientPs = conn.prepareStatement(ingredientSql)) {
                     ingredientPs.setInt(1, kondate.getId());
+
                     try (ResultSet ingredientRs = ingredientPs.executeQuery()) {
                         List<String> ingredientList = new ArrayList<>();
+
                         while (ingredientRs.next()) {
-                            ingredientList.add(ingredientRs.getString("ingredient_name"));
+                            ingredientList.add(
+                                ingredientRs.getString("ingredient_name")
+                            );
                         }
+
                         kondate.setIngredients(ingredientList);
                     }
                 }
