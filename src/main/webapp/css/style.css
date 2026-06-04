@@ -47,7 +47,7 @@ svg .st13 { opacity: 0.5; fill: #FFFFFF; }
   opacity: 0;
   transform: scale(0.1) rotate(0);
   transform-origin: 115px 526px;
-  transition-delay: 1s;
+  transition-delay: 2s;
   transition-duration: 300ms;
 }
 #c2 { transform: translate(0, 0) rotate(0); transform-origin: 210px 360px; transition-duration: 1s; }
