@@ -21,6 +21,8 @@
     <meta charset="UTF-8">
     <title>今日の献立ガチャ</title>
     <link rel="stylesheet" href="../css/style.css?v=2">
+    <link rel="stylesheet" href="../css/gacha.css">
+    
     <style>
         /* --- 全体レイアウト（サイドバーのはみ出しを隠す設定） --- */
         body {
@@ -55,24 +57,15 @@
 
     <audio id="gacha-audio" src="${pageContext.request.contextPath}/audio/gacha.mp3" preload="auto"></audio>
 
-    <div style="
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 999;
-        background: white;
-        padding: 10px;
-        border-radius: 10px;
-        box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    ">
-        <div>
+    <div class="user-panel">
+        <div class="user-name">
             ようこそ <%= loginUser.getUserName() %> さん
         </div>
-        <a href="<%= request.getContextPath() %>/LogoutServlet">
+        <a class="logout-link" href="<%= request.getContextPath() %>/LogoutServlet">
             ログアウト
         </a>
     </div>
-
+    
     <button type="button" class="sidebar-toggle" id="toggle-btn">アレルギー設定 ⚙</button>
 
     <section class="wrapper" id="gacha-wrapper">
@@ -269,7 +262,6 @@
             event.stopPropagation();
         });
 
-        // サイドバーの外側（全体）をクリックしたときに自動で閉じる
         document.body.addEventListener('click', function(e) {
             if (!sidebar.contains(e.target) && sidebar.classList.contains('open')) {
                 sidebar.classList.remove('open');
@@ -283,14 +275,12 @@
             if (isSpinning) return;
             isSpinning = true;
 
-            // ★【追加】ハンドルクリックと同時に効果音をリセットして再生！
             const gachaAudio = document.getElementById('gacha-audio');
             if (gachaAudio) {
                 gachaAudio.currentTime = 0;
                 gachaAudio.play().catch(error => console.log("音声再生エラー:", error));
             }
 
-            // 元のカラー演出処理
             const colors = ['st7', 'st8', 'st9', 'st10', 'st11', 'st12'];
             const c1ColorElement = document.getElementById('c1-color');
 
@@ -299,7 +289,6 @@
             });
             c1ColorElement.classList.remove('gold-capsule');
 
-            // 10%で金
             const isGold = Math.random() < 0.1;
 
             if(isGold){
@@ -310,8 +299,8 @@
             } else {
                 document.getElementById('isGold').value = 'false';
                 
-                // 金演出解除
                 c1ColorElement.classList.remove('gold-capsule');
+                c1Element = document.getElementById('c1-color');
                 c1ColorElement.removeAttribute('fill');
                 document.getElementById('c1-top').removeAttribute('fill');
 
@@ -319,16 +308,13 @@
                 c1ColorElement.classList.add(randomColor);
             }
             
-            // アニメーション用クラスを付与
             document.getElementById('gacha-wrapper').classList.add('act');
 
-            // 送信直前に、チェックが入っているアレルギーIDをかき集める処理
             const checkedBoxes = document.querySelectorAll('input[name="allergies"]:checked');
             const checkedValues = Array.from(checkedBoxes).map(cb => cb.value);
             
-            sidebar.style.display = 'block'; // 送信の瞬間だけ物理的に存在させる
+            sidebar.style.display = 'block'; 
             
-            // ★【修正】音の長さ（約3秒 = 3000ミリ秒）に合わせて待ち時間を 3000 に変更
             setTimeout(function() {
                 document.getElementById('gacha-form').submit();
             }, 3000);

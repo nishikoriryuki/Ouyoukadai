@@ -33,6 +33,19 @@ public class RegisterServlet extends HttpServlet {
 
         UserDAO dao =
                 new UserDAO();
+        
+        if (dao.existsUserName(userName)) {
+
+            request.setAttribute(
+                    "errorMsg",
+                    "そのユーザー名はすでに使われています");
+
+            request.getRequestDispatcher(
+                    "/jsp/register.jsp")
+                    .forward(request, response);
+
+            return;
+        }
 
         boolean result =
                 dao.insertUser(user);
