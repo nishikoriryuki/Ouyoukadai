@@ -32,15 +32,26 @@
     </c:choose>
 ">
 
+    <!-- デバッグ用 -->
+    <div style="display:none;">
+        name=${kondate.name}
+        difficulty=${kondate.difficulty}
+        calorie=${kondate.calorie}
+        imageUrl=${kondate.imageUrl}
+    </div>
+
     <!-- 料理名 -->
     <div class="intro">
         🍽 ${kondate.name}
     </div>
 
-    <!-- 画像 -->
+    <!-- 料理画像 -->
     <div class="food-image">
-        <img src="<%= request.getContextPath() %>/${kondate.imageUrl}"
-             alt="${kondate.name}">
+
+        <img
+            src="<%= request.getContextPath() %>/images/${kondate.imageUrl}"
+            alt="${kondate.name}">
+
     </div>
 
     <!-- カード -->
@@ -52,12 +63,14 @@
             <p>🥕 材料：</p>
 
             <ul>
+
                 <c:forEach var="ingredient"
                     items="${kondate.ingredients}">
 
                     <li>${ingredient}</li>
 
                 </c:forEach>
+
             </ul>
 
         </div>
@@ -107,25 +120,29 @@
 
     </div>
 
-    <!-- 戻るフォーム（状態保持） -->
+    <!-- 戻るフォーム -->
     <form id="back-gacha-form"
         action="<%= request.getContextPath() %>/jsp/gacha.jsp"
         method="POST"
         style="display:none;">
 
-        <c:forEach var="id" items="${selectedAllergies}">
-            <input type="hidden"
-                   name="prevAllergies"
-                   value="${id}">
+        <c:forEach var="id"
+            items="${selectedAllergies}">
+
+            <input
+                type="hidden"
+                name="prevAllergies"
+                value="${id}">
+
         </c:forEach>
 
     </form>
 
     <!-- 戻るリンク -->
-    <p style="text-align: center; margin-top: 20px;">
+    <p style="text-align:center; margin-top:20px;">
 
         <a href="javascript:void(0);"
-           onclick="document.getElementById('back-gacha-form').submit();">
+            onclick="document.getElementById('back-gacha-form').submit();">
 
             もう一度ガチャを回す
 

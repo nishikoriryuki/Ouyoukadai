@@ -75,7 +75,7 @@ public class KondateDAO {
                 kondate = new Kondate();
                 kondate.setId(rs.getInt("menu_id"));
                 kondate.setName(rs.getString("menu_name"));
-                kondate.setCalorie(rs.getInt("calories"));
+                kondate.setCalorie(rs.getInt("calorie"));
                 kondate.setDifficulty(rs.getInt("difficulty"));
 
                 // ⭐ ここ追加（画像URL）
@@ -178,7 +178,7 @@ public class KondateDAO {
                 kondate = new Kondate();
                 kondate.setId(rs.getInt("menu_id"));
                 kondate.setName(rs.getString("menu_name"));
-                kondate.setCalorie(rs.getInt("calories"));
+                kondate.setCalorie(rs.getInt("calorie"));
                 kondate.setDifficulty(rs.getInt("difficulty"));
 
                 // ⭐ ここも追加（画像URL）
