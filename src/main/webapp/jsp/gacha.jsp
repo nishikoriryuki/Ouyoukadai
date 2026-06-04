@@ -29,64 +29,26 @@
     <meta charset="UTF-8">
     <title>今日の献立ガチャ</title>
     <link rel="stylesheet" href="../css/style.css?v=2">
-    <style>
-        /* --- 全体レイアウト（サイドバーのはみ出しを隠す設定） --- */
-        body {
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            position: relative;
-            font-family: sans-serif;
-        }
-
-        
-        @keyframes goldGlow {
-
-            0% {
-                filter: drop-shadow(0 0 8px #ffd700);
-            }
-        
-            50% {
-                filter: drop-shadow(0 0 30px #fff176);
-            }
-        
-            100% {
-                filter: drop-shadow(0 0 8px #ffd700);
-            }
-        }
-        
-        .gold-capsule {
-        
-            animation: goldGlow 0.8s infinite;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/gacha.css">
 </head>
 
 <body>
 
-    <div style="
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 999;
-        background: white;
-        padding: 10px;
-        border-radius: 10px;
-        box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    ">
-    
-        <div>
+    <div class="user-panel">
+
+        <div class="user-name">
             ようこそ
             <%= loginUser.getUserName() %>
             さん
         </div>
-
-    <a href="<%= request.getContextPath() %>/LogoutServlet">
-        ログアウト
-    </a>
-
-</div>
-
+    
+        <a class="logout-link"
+           href="<%= request.getContextPath() %>/LogoutServlet">
+            ログアウト
+        </a>
+    
+    </div>
+    
     <button type="button" class="sidebar-toggle" id="toggle-btn">アレルギー設定 ⚙</button>
 
     <section class="wrapper" id="gacha-wrapper">
