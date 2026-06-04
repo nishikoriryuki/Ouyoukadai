@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 public class DBUtil {
 
 
-    private static final String URL_LOCAL = "jdbc:sqlite:C:/pleiades/workspace/KondateGacha/db/kondate.db";
+    private static final String URL_LOCAL = "jdbc:sqlite:C:/Users\\User/git\\Ouyoukadai/db/kondate.db";
 
     private static final String URL_RENDER =
             "jdbc:sqlite:/usr/local/tomcat/db/kondate.db";
