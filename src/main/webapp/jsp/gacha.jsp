@@ -263,6 +263,7 @@
             const gachaAudio = document.getElementById('gacha-audio');
             if (gachaAudio) {
                 gachaAudio.currentTime = 0.2;
+                gachaAudio.volume = 0.3;
                 gachaAudio.play().catch(error => console.log("音声再生エラー:", error));
             }
             
