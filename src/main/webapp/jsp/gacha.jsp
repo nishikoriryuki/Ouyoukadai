@@ -228,22 +228,6 @@
                     <input type="checkbox" name="allergies" value="5" ${isChecked ? 'checked' : ''}>大豆
                 </label>
 
-                <label class="allergy-item">
-                    <c:set var="isChecked" value="false" />
-                    <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
-                        <c:if test="${prev == '6'}"><c:set var="isChecked" value="true" /></c:if>
-                    </c:forEach>
-                    <input type="checkbox" name="allergies" value="6" ${isChecked ? 'checked' : ''}>落花生
-                </label>
-
-                <label class="allergy-item">
-                    <c:set var="isChecked" value="false" />
-                    <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
-                        <c:if test="${prev == '7'}"><c:set var="isChecked" value="true" /></c:if>
-                    </c:forEach>
-                    <input type="checkbox" name="allergies" value="7" ${isChecked ? 'checked' : ''}>そば
-                </label>
-
             </div>
         </div>
     </form>
@@ -278,9 +262,10 @@
 
             const gachaAudio = document.getElementById('gacha-audio');
             if (gachaAudio) {
-                gachaAudio.currentTime = 0;
+                gachaAudio.currentTime = 0.2;
                 gachaAudio.play().catch(error => console.log("音声再生エラー:", error));
             }
+            
 
             const colors = ['st7', 'st8', 'st9', 'st10', 'st11', 'st12'];
             const c1ColorElement = document.getElementById('c1-color');
