@@ -5,14 +5,8 @@ import java.sql.DriverManager;
 
 public class DBUtil {
 
-<<<<<<< HEAD
     private static final String URL_LOCAL = 
             "jdbc:sqlite:C:/Users/User/git/Ouyoukadai/db/kondate.db";
-=======
-
-
-    private static final String URL_LOCAL = "jdbc:sqlite:C:/Users\\User/git/Ouyoukadai/db/kondate.db";
->>>>>>> refs/remotes/origin/master
 
 
     private static final String URL_RENDER =
