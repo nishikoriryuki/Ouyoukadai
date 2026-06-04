@@ -215,7 +215,8 @@ body{
 
 .easy,
 .normal,
-.hard{
+.hard,
+.super-hard{
 
     display:inline-block;
 
@@ -231,63 +232,70 @@ body{
         0 4px 10px rgba(0,0,0,0.15);
 }
 
-/* 簡単 */
+/* =========================
+   簡単（C）
+========================= */
 
 .easy{
 
     background:
         linear-gradient(
             45deg,
-            #56ab2f,
-            #a8e063
+            #00c853,
+            #69f0ae
         );
 }
 
 body.easy-bg{
-
     background:
         linear-gradient(
             135deg,
-            #d4fc79,
-            #96e6a1
+            #dcedc8,
+            #aed581,
+            #8bc34a
         );
 }
 
-/* 普通 */
+
+/* =========================
+   普通（R）
+========================= */
 
 .normal{
 
     background:
         linear-gradient(
             45deg,
-            #f7971e,
-            #ffd200
+            #ffb300,
+            #ffd54f
         );
 }
 
 body.normal-bg{
-
     background:
         linear-gradient(
             135deg,
-            #f6d365,
-            #fda085
+            #fff8b5,
+            #ffd54f,
+            #ffb74d
         );
 }
 
-/* 難しい */
+
+/* =========================
+   難しい（SR）
+========================= */
 
 .hard{
 
     background:
         linear-gradient(
             45deg,
-            #cb2d3e,
-            #ef473a
+            #b71c1c,
+            #f44336
         );
 
-    animation:
-        glow 1s infinite alternate;
+    animation:glow 1s infinite alternate;
 }
 
 body.hard-bg{
@@ -295,15 +303,90 @@ body.hard-bg{
     background:
         linear-gradient(
             135deg,
-            #667eea,
-            #764ba2,
-            #ff6ec4
+            #b71c1c,
+            #d32f2f,
+            #ff5252
         );
 
     background-size:400% 400%;
 
+    animation:rainbow 4s ease infinite;
+}
+
+
+/* =========================
+   激ムズ（SSR）
+========================= */
+
+.super-hard{
+
+    background:
+        linear-gradient(
+            45deg,
+            #000000,
+            #4a148c,
+            #7c4dff
+        );
+
     animation:
-        rainbow 8s ease infinite;
+        ssrGlow 1s infinite alternate;
+}
+
+body.super-hard-bg{
+
+    background:
+        linear-gradient(
+            135deg,
+            #120018,
+            #2e003e,
+            #4a148c,
+            #6a1b9a
+        );
+
+    background-size:400% 400%;
+
+    animation:rainbow 4s ease infinite;
+}
+
+/* レア度 */
+
+.rarity {
+    display:inline-block;
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:bold;
+    color:white;
+    margin-top:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+
+.rarity-c {
+    background:linear-gradient(45deg, #56ab2f, #a8e063);
+}
+
+.rarity-r {
+    background:linear-gradient(45deg, #f7971e, #ffd200);
+}
+
+.rarity-sr {
+    background:linear-gradient(45deg, #cb2d3e, #ef473a);
+}
+
+.rarity-ssr {
+    background:linear-gradient(45deg, #ffd700, #ff0080, #7b1fa2);
+    animation:ssrGlow 1s infinite alternate;
+}
+
+@keyframes ssrGlow {
+    from {
+        box-shadow:0 0 10px rgba(255,215,0,0.5);
+        transform:scale(1);
+    }
+
+    to {
+        box-shadow:0 0 30px rgba(255,215,0,1);
+        transform:scale(1.05);
+    }
 }
 
 @keyframes rainbow{
@@ -333,6 +416,7 @@ body.hard-bg{
             0 0 25px rgba(255,0,0,1);
     }
 }
+
 
 /* =========================
    戻るボタン

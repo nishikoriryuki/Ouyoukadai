@@ -27,9 +27,13 @@
             normal-bg
         </c:when>
 
-        <c:otherwise>
+        <c:when test='${kondate.difficulty == 3}'>
             hard-bg
-        </c:otherwise>
+        </c:when>
+
+        <c:when test='${kondate.difficulty == 4}'>
+            super-hard-bg
+        </c:when>
     </c:choose>
 ">
 
@@ -86,37 +90,49 @@
 
         </div>
 
-        <!-- 難易度 -->
+        <!-- 難易度・レア度 -->
         <div class="kondate_difficulty">
-
+        
             <c:choose>
-
+        
                 <c:when test="${kondate.difficulty == 1}">
-
                     <p class="easy">
                         🟢 難易度：簡単
                     </p>
-
+                    <p class="rarity rarity-c">
+                        レア度：C
+                    </p>
                 </c:when>
-
+        
                 <c:when test="${kondate.difficulty == 2}">
-
                     <p class="normal">
                         🟠 難易度：普通
                     </p>
-
+                    <p class="rarity rarity-r">
+                        レア度：R
+                    </p>
                 </c:when>
-
-                <c:otherwise>
-
+        
+                <c:when test="${kondate.difficulty == 3}">
                     <p class="hard">
                         🔴 難易度：難しい
                     </p>
-
-                </c:otherwise>
-
+                    <p class="rarity rarity-sr">
+                        レア度：SR
+                    </p>
+                </c:when>
+        
+                <c:when test="${kondate.difficulty == 4}">
+                    <p class="super-hard">
+                        🟣 難易度：激ムズ
+                    </p>
+                    <p class="rarity rarity-ssr">
+                        レア度：SSR
+                    </p>
+                </c:when>
+        
             </c:choose>
-
+        
         </div>
 
     </div>
