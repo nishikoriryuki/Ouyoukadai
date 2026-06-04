@@ -8,6 +8,7 @@ public class Kondate {
     private String name;
     private int calorie;
     private int difficulty;
+    private String imageUrl;
     
     private List<String> ingredients;
 
@@ -52,5 +53,13 @@ public class Kondate {
 
     public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
+    }
+    
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
