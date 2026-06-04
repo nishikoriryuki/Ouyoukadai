@@ -380,3 +380,20 @@ a:hover{
 
     opacity:0.9;
 }
+
+.food-image {
+    text-align: center;
+    margin: 15px 0 25px;
+}
+
+.food-image img {
+    width: 280px;
+    max-width: 85%;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.food-image img:hover {
+    transform: scale(1.03);
+}
