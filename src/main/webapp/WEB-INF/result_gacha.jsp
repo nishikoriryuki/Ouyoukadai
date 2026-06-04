@@ -44,6 +44,13 @@
         calorie=${kondate.calorie}
         imageUrl=${kondate.imageUrl}
     </div>
+    
+    <!-- レア度：星表示 -->
+    <div class="rarity-stars">
+        <c:forEach begin="1" end="${kondate.difficulty}">
+            ★
+        </c:forEach>
+    </div>
 
     <!-- 料理名 -->
     <div class="intro">
@@ -99,17 +106,11 @@
                     <p class="easy">
                         🟢 難易度：簡単
                     </p>
-                    <p class="rarity rarity-c">
-                        レア度：C
-                    </p>
                 </c:when>
         
                 <c:when test="${kondate.difficulty == 2}">
                     <p class="normal">
                         🟠 難易度：普通
-                    </p>
-                    <p class="rarity rarity-r">
-                        レア度：R
                     </p>
                 </c:when>
         
@@ -117,17 +118,11 @@
                     <p class="hard">
                         🔴 難易度：難しい
                     </p>
-                    <p class="rarity rarity-sr">
-                        レア度：SR
-                    </p>
                 </c:when>
         
                 <c:when test="${kondate.difficulty == 4}">
                     <p class="super-hard">
                         🟣 難易度：激ムズ
-                    </p>
-                    <p class="rarity rarity-ssr">
-                        レア度：SSR
                     </p>
                 </c:when>
         

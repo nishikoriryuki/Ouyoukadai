@@ -31,22 +31,6 @@ public class Kondate {
         }
     }
 
-    //レア度紐づけ
-    public String getRarity() {
-        switch (difficulty) {
-            case 1:
-                return "C";
-            case 2:
-                return "R";
-            case 3:
-                return "SR";
-            case 4:
-                return "SSR";
-            default:
-                return "?";
-        }
-    }
-
     public int getId() {
         return id;
     }
