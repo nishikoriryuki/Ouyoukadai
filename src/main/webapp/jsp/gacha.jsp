@@ -1,24 +1,16 @@
 <%@ page import="model.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-
-
 <%
-    User loginUser =
-        (User) session.getAttribute("loginUser");
+    User loginUser = (User) session.getAttribute("loginUser");
 
     if (loginUser == null) {
         response.sendRedirect(
-            request.getContextPath()
-            + "/jsp/login.jsp");
+            request.getContextPath() + "/jsp/login.jsp"
+        );
         return;
     }
 %>
-
-
-<%@ taglib prefix="c" uri="jakarta.tags.core" %> 
-<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
-
 
 <%@ taglib prefix="c" uri="jakarta.tags.core" %> 
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
@@ -31,23 +23,48 @@
     <title>今日の献立ガチャ</title>
     <link rel="stylesheet" href="../css/style.css?v=2">
     <link rel="stylesheet" href="../css/gacha.css">
+    
+    <style>
+        /* --- 全体レイアウト（サイドバーのはみ出しを隠す設定） --- */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+            font-family: sans-serif;
+        }
+
+        @keyframes goldGlow {
+            0% {
+                filter: drop-shadow(0 0 8px #ffd700);
+            }
+            50% {
+                filter: drop-shadow(0 0 30px #fff176);
+            }
+            100% {
+                filter: drop-shadow(0 0 8px #ffd700);
+            }
+        }
+        
+        .gold-capsule {
+            animation: goldGlow 0.8s infinite;
+        }
+    </style>
+    
+    <script src="${pageContext.request.contextPath}/js/gacha.js"></script>
 </head>
 
 <body>
 
-    <div class="user-panel">
+    <audio id="gacha-audio" src="${pageContext.request.contextPath}/audio/gacha.mp3" preload="auto"></audio>
 
+    <div class="user-panel">
         <div class="user-name">
-            ようこそ
-            <%= loginUser.getUserName() %>
-            さん
+            ようこそ <%= loginUser.getUserName() %> さん
         </div>
-    
-        <a class="logout-link"
-           href="<%= request.getContextPath() %>/LogoutServlet">
+        <a class="logout-link" href="<%= request.getContextPath() %>/LogoutServlet">
             ログアウト
         </a>
-    
     </div>
     
     <button type="button" class="sidebar-toggle" id="toggle-btn">アレルギー設定 ⚙</button>
@@ -56,21 +73,13 @@
         <div class="toy">
             <svg viewBox="0 0 420 600" width="100%" height="100%">
                 <defs>
-
-                    <linearGradient id="goldGradient"
-                                    x1="0%"
-                                    y1="0%"
-                                    x2="100%"
-                                    y2="100%">
-                
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#B67B03"/>
                         <stop offset="45%" stop-color="#DAAF08"/>
                         <stop offset="70%" stop-color="#FEE9A0"/>
                         <stop offset="85%" stop-color="#DAAF08"/>
                         <stop offset="100%" stop-color="#B67B03"/>
-                
                     </linearGradient>
-                
                 </defs>
             
                 <g id="capsuletoy">
@@ -172,9 +181,7 @@
     </section>
 
     <form id="gacha-form" method="POST" action="${pageContext.request.contextPath}/ChooseServlet">
-    
-
-        <input type="hidden"name="isGold"id="isGold">
+        <input type="hidden" name="isGold" id="isGold">
         <input type="hidden" name="allergies" id="hiddenAllergies">
 
         <div class="sidebar" id="sidebar">
@@ -218,9 +225,7 @@
                     <c:forEach var="prev" items="${selectedAllergies != null ? selectedAllergies : paramValues.prevAllergies}">
                         <c:if test="${prev == '5'}"><c:set var="isChecked" value="true" /></c:if>
                     </c:forEach>
-
                     <input type="checkbox" name="allergies" value="5" ${isChecked ? 'checked' : ''}>大豆
-
                 </label>
 
                 <label class="allergy-item">
@@ -258,7 +263,6 @@
             event.stopPropagation();
         });
 
-        // サイドバーの外側（全体）をクリックしたときに自動で閉じる
         document.body.addEventListener('click', function(e) {
             if (!sidebar.contains(e.target) && sidebar.classList.contains('open')) {
                 sidebar.classList.remove('open');
@@ -266,94 +270,55 @@
             }
         });
 
-
         // --- 2. 元のガチャの回転演出 ＆ 送信制御 ---
         let isSpinning = false;
         document.getElementById('handle').addEventListener('click', function() {
             if (isSpinning) return;
             isSpinning = true;
 
-            // 元のカラー演出処理
-            const colors = ['st7', 'st8', 'st9', 'st10', 'st11', 'st12'];
+            const gachaAudio = document.getElementById('gacha-audio');
+            if (gachaAudio) {
+                gachaAudio.currentTime = 0;
+                gachaAudio.play().catch(error => console.log("音声再生エラー:", error));
+            }
 
-            const c1ColorElement =
-                    document.getElementById('c1-color');
+            const colors = ['st7', 'st8', 'st9', 'st10', 'st11', 'st12'];
+            const c1ColorElement = document.getElementById('c1-color');
 
             colors.forEach(function(className) {
                 c1ColorElement.classList.remove(className);
             });
-
             c1ColorElement.classList.remove('gold-capsule');
 
-            // 10%で金
             const isGold = Math.random() < 0.1;
 
             if(isGold){
-
                 document.getElementById('isGold').value = 'true';
-
-                c1ColorElement.setAttribute(
-                    "fill",
-                    "url(#goldGradient)"
-                );
-
-                document.getElementById(
-                    "c1-top"
-                ).setAttribute(
-                    "fill",
-                    "#FEE9A0"
-                );
-
-                c1ColorElement.classList.add(
-                    "gold-capsule"
-                );
-
-            }else{
-
+                c1ColorElement.setAttribute("fill", "url(#goldGradient)");
+                document.getElementById("c1-top").setAttribute("fill", "#FEE9A0");
+                c1ColorElement.classList.add("gold-capsule");
+            } else {
                 document.getElementById('isGold').value = 'false';
+                
+                c1ColorElement.classList.remove('gold-capsule');
+                c1Element = document.getElementById('c1-color');
+                c1ColorElement.removeAttribute('fill');
+                document.getElementById('c1-top').removeAttribute('fill');
 
-                // 金演出解除
-                c1ColorElement.classList.remove(
-                    'gold-capsule'
-                );
-
-                c1ColorElement.removeAttribute(
-                    'fill'
-                );
-
-                document.getElementById(
-                    'c1-top'
-                ).removeAttribute(
-                    'fill'
-                );
-
-                const randomColor =
-                    colors[Math.floor(
-                        Math.random() * colors.length
-                    )];
-
-                c1ColorElement.classList.add(
-                    randomColor
-                );
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                c1ColorElement.classList.add(randomColor);
             }
             
-            // アニメーション用クラスを付与
             document.getElementById('gacha-wrapper').classList.add('act');
 
-
-         // ★送信直前に、チェックが入っているアレルギーIDをかき集める処理を追加
             const checkedBoxes = document.querySelectorAll('input[name="allergies"]:checked');
             const checkedValues = Array.from(checkedBoxes).map(cb => cb.value);
             
-            // 隠しパラメータに「1,2」のようにカンマ区切りでセットするか、
-            // もしくは一時的にチェックボックスのname属性を維持して確実に届くようにする
-            // 一番安全なのは、サイドバーのクラスを送信直前だけ一瞬 'open' に固定することです
-            sidebar.style.display = 'block'; // 送信の瞬間だけ物理的に存在させる
+            sidebar.style.display = 'block'; 
             
-            // 1.5秒後にチェックボックスのデータと一緒にサーブレットに送信
             setTimeout(function() {
                 document.getElementById('gacha-form').submit();
-            }, 1500);
+            }, 3000);
         });
     </script>
 
