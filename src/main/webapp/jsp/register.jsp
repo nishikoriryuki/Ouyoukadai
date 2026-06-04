@@ -19,6 +19,10 @@
     <div class="register-title">
         🍳 ユーザー登録
     </div>
+    
+    <p style="color:red;">
+        ${errorMsg}
+    </p>
 
     <form action="<%=request.getContextPath()%>/RegisterServlet"
           method="post">

@@ -16,6 +16,10 @@
     <div class="login-title">
         🎲 今日の献立ガチャ
     </div>
+    
+    <p style="color:red;">
+        ${errorMsg}
+    </p>
 
     <form action="<%=request.getContextPath()%>/LoginServlet"
           method="post">
