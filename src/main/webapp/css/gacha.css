@@ -1,0 +1,91 @@
+/* --- 全体レイアウト（サイドバーのはみ出しを隠す設定） --- */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+            font-family: sans-serif;
+        }
+
+        
+        @keyframes goldGlow {
+
+            0% {
+                filter: drop-shadow(0 0 8px #ffd700);
+            }
+        
+            50% {
+                filter: drop-shadow(0 0 30px #fff176);
+            }
+        
+            100% {
+                filter: drop-shadow(0 0 8px #ffd700);
+            }
+        }
+        
+        .gold-capsule {
+        
+            animation: goldGlow 0.8s infinite;
+        }
+        
+        .user-panel {
+
+            position: fixed;
+        
+            top: 20px;
+            left: 20px;
+        
+            z-index: 100;
+        
+            background-color: #f8f9fa;
+        
+            padding: 15px 20px;
+        
+            border-radius: 12px;
+        
+            box-shadow:
+                0 4px 6px rgba(0,0,0,0.1);
+        
+            min-width: 220px;
+        }
+        
+        .user-name {
+        
+            font-size: 16px;
+        
+            font-weight: bold;
+        
+            color: #333;
+        
+            margin-bottom: 10px;
+        }
+        
+        .logout-link {
+        
+            display: inline-block;
+        
+            background-color: #ff6b6b;
+        
+            color: white;
+        
+            text-decoration: none;
+        
+            padding: 8px 14px;
+        
+            border-radius: 5px;
+        
+            font-size: 14px;
+        
+            font-weight: bold;
+        
+            transition: 0.3s;
+        }
+        
+        .logout-link:hover {
+        
+            background-color: #fa5252;
+        }
+        
+        .user-name::before {
+            content: "👤 ";
+        }
