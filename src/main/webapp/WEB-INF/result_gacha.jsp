@@ -9,6 +9,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ガチャ結果</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/result_gacha.css">
 </head>
