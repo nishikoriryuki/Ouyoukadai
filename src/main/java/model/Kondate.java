@@ -14,6 +14,22 @@ public class Kondate {
 
     public Kondate() {
     }
+    
+    //難易度紐づけ
+    public String getDifficultyName() {
+        switch (difficulty) {
+            case 1:
+                return "簡単";
+            case 2:
+                return "普通";
+            case 3:
+                return "難しい";
+            case 4:
+                return "激ムズ";
+            default:
+                return "不明";
+        }
+    }
 
     public int getId() {
         return id;

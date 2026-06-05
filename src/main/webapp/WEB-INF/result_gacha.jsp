@@ -27,9 +27,13 @@
             normal-bg
         </c:when>
 
-        <c:otherwise>
+        <c:when test='${kondate.difficulty == 3}'>
             hard-bg
-        </c:otherwise>
+        </c:when>
+
+        <c:when test='${kondate.difficulty == 4}'>
+            super-hard-bg
+        </c:when>
     </c:choose>
 ">
 
@@ -39,6 +43,13 @@
         difficulty=${kondate.difficulty}
         calorie=${kondate.calorie}
         imageUrl=${kondate.imageUrl}
+    </div>
+    
+    <!-- レア度：星表示 -->
+    <div class="rarity-stars">
+        <c:forEach begin="1" end="${kondate.difficulty}">
+            ★
+        </c:forEach>
     </div>
 
     <!-- 料理名 -->
@@ -86,37 +97,37 @@
 
         </div>
 
-        <!-- 難易度 -->
+        <!-- 難易度・レア度 -->
         <div class="kondate_difficulty">
-
+        
             <c:choose>
-
+        
                 <c:when test="${kondate.difficulty == 1}">
-
                     <p class="easy">
                         🟢 難易度：簡単
                     </p>
-
                 </c:when>
-
+        
                 <c:when test="${kondate.difficulty == 2}">
-
                     <p class="normal">
                         🟠 難易度：普通
                     </p>
-
                 </c:when>
-
-                <c:otherwise>
-
+        
+                <c:when test="${kondate.difficulty == 3}">
                     <p class="hard">
                         🔴 難易度：難しい
                     </p>
-
-                </c:otherwise>
-
+                </c:when>
+        
+                <c:when test="${kondate.difficulty == 4}">
+                    <p class="super-hard">
+                        🟣 難易度：激ムズ
+                    </p>
+                </c:when>
+        
             </c:choose>
-
+        
         </div>
 
     </div>
