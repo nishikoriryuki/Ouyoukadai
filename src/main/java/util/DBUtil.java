@@ -7,7 +7,7 @@ public class DBUtil {
 
     //ローカル用
     private static final String URL_LOCAL = 
-            "jdbc:sqlite:C:\\pleiades\\workspace\\KondateGacha\\db\\kondate.db";
+            "jdbc:sqlite:C:/Users/User/git\\Ouyoukadai/db/kondate.db";
 
     //レンダー用
     private static final String URL_RENDER =
