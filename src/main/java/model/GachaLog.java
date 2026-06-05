@@ -57,33 +57,56 @@ public class GachaLog implements Serializable {
     }
 
     /**
-     * 新しい履歴をデータベースに保存し、メモリ上のリストも更新する
+     * 新しい履歴をデータベースに保存し、最新2件を残して古いログを自動で削除する
      */
     public void saveToDatabase(int userId, int menuId, String menuName) {
-        String sql = "INSERT INTO gacha_logs (user_id, menu_id) VALUES (?, ?)";
+        String insertSql = "INSERT INTO gacha_logs (user_id, menu_id) VALUES (?, ?)";
+        
+        // ★SQLiteで動く「最新2件以外を削除する」SQL
+        // 「自分の履歴のうち、最新の2件のdrawn_at」よりも古い日時のデータを削除します
+        String deleteSql = 
+            "DELETE FROM gacha_logs " +
+            "WHERE user_id = ? " +
+            "AND drawn_at < IFNULL((" +
+            "    SELECT drawn_at FROM gacha_logs " +
+            "    WHERE user_id = ? " +
+            "    ORDER BY drawn_at DESC " +
+            "    LIMIT 1 OFFSET 1" + // 最新から2番目の日取りを取得
+            "), '1970-01-01 00:00:00')";
 
-        try (
-            Connection conn = DBUtil.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-        ) {
-            ps.setInt(1, userId);
-            ps.setInt(2, menuId);
-            ps.executeUpdate();
+        try (Connection conn = DBUtil.getConnection()) {
+            // 自動コミットをオフにして、追加と削除をセット（トランザクション）で行う
+            conn.setAutoCommit(false);
+
+            // 1. 新しい履歴の追加
+            try (PreparedStatement psInsert = conn.prepareStatement(insertSql)) {
+                psInsert.setInt(1, userId);
+                psInsert.setInt(2, menuId);
+                psInsert.executeUpdate();
+            }
+
+            // 2. ★【追加】最新2件を残して古いデータを削除
+            try (PreparedStatement psDelete = conn.prepareStatement(deleteSql)) {
+                psDelete.setInt(1, userId);
+                psDelete.setInt(2, userId);
+                psDelete.executeUpdate();
+            }
+
+            // 確定
+            conn.commit();
 
             // メモリ上のアレイリストも最新状態に追従
             recentIds.add(menuId);
             recentNames.add(menuName);
-            
-            // 2件を超えたら古い履歴（先頭）をリストから取り除く
-            if (recentIds.size() > MAX_HISTORY) {
+            if (recentIds.size() > 2) {
                 recentIds.remove(0);
                 recentNames.remove(0);
             }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * 該当なしの場合に、データベース上のこのユーザーの過去ログをリセットする
      */
