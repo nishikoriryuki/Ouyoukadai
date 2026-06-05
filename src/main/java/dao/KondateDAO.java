@@ -11,13 +11,15 @@ import util.DBUtil;
 
 public class KondateDAO {
 
-    // ★修正：引数に List<Integer> recentIds を追加
-    public Kondate chooseRandomKondate(String[] allergyIds, List<Integer> recentIds) {
+    public Kondate chooseRandomKondate(
+            String[] allergyIds,
+            List<Integer> recentIds) {
 
         Kondate kondate = null;
-        StringBuilder sql = new StringBuilder(); // SQLを動的に組み立てるため StringBuilder に変更
+        StringBuilder sql = new StringBuilder();
 
         List<Integer> validAllergyIds = new ArrayList<>();
+
         if (allergyIds != null) {
             for (String idStr : allergyIds) {
                 if (idStr != null && !idStr.trim().isEmpty()) {
@@ -26,38 +28,45 @@ public class KondateDAO {
             }
         }
 
-        // --- アレルギー除外の条件組み立て ---
         if (validAllergyIds.isEmpty()) {
             sql.append("SELECT * FROM menus WHERE 1=1 ");
         } else {
             StringBuilder placeholders = new StringBuilder();
+
             for (int i = 0; i < validAllergyIds.size(); i++) {
                 placeholders.append("?");
+
                 if (i < validAllergyIds.size() - 1) {
                     placeholders.append(",");
                 }
             }
 
-            sql.append("SELECT DISTINCT m.* FROM menus m WHERE m.menu_id NOT IN ( ")
-               .append("    SELECT mi.menu_id FROM menu_ingredients mi ")
-               .append("    JOIN ingredient_allergens ia ON mi.ingredient_id = ia.ingredient_id ")
-               .append("    WHERE ia.allergen_id IN (").append(placeholders).append(") ")
+            sql.append("SELECT DISTINCT m.* FROM menus m ")
+               .append("WHERE m.menu_id NOT IN ( ")
+               .append("    SELECT mi.menu_id ")
+               .append("    FROM menu_ingredients mi ")
+               .append("    JOIN ingredient_allergens ia ")
+               .append("    ON mi.ingredient_id = ia.ingredient_id ")
+               .append("    WHERE ia.allergen_id IN (")
+               .append(placeholders)
+               .append(") ")
                .append(") ");
         }
 
-        // ★【追加】直近に引いた料理のIDリスト（recentIds）があれば、それも除外する条件を追加
         if (recentIds != null && !recentIds.isEmpty()) {
-            sql.append(" AND menu_id NOT IN (");
+            sql.append("AND menu_id NOT IN (");
+
             for (int i = 0; i < recentIds.size(); i++) {
-                sql.append(recentIds.get(i));
+                sql.append("?");
+
                 if (i < recentIds.size() - 1) {
                     sql.append(",");
                 }
             }
+
             sql.append(") ");
         }
 
-        // 最後にランダムに並び替えて1件取得する
         sql.append("ORDER BY RANDOM() LIMIT 1");
 
         try (
@@ -65,40 +74,22 @@ public class KondateDAO {
             PreparedStatement ps = conn.prepareStatement(sql.toString());
         ) {
 
-            if (!validAllergyIds.isEmpty()) {
-                for (int i = 0; i < validAllergyIds.size(); i++) {
-                    ps.setInt(i + 1, validAllergyIds.get(i));
+            int index = 1;
+
+            for (Integer allergyId : validAllergyIds) {
+                ps.setInt(index++, allergyId);
+            }
+
+            if (recentIds != null && !recentIds.isEmpty()) {
+                for (Integer recentId : recentIds) {
+                    ps.setInt(index++, recentId);
                 }
             }
 
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                kondate = new Kondate();
-                kondate.setId(rs.getInt("menu_id"));
-                kondate.setName(rs.getString("menu_name"));
-                kondate.setCalorie(rs.getInt("calorie"));
-                kondate.setDifficulty(rs.getInt("difficulty"));
-                kondate.setImageUrl(rs.getString("image_url"));
-
-                String ingredientSql =
-                    "SELECT i.ingredient_name " +
-                    "FROM ingredients i " +
-                    "JOIN menu_ingredients mi " +
-                    "ON i.ingredient_id = mi.ingredient_id " +
-                    "WHERE mi.menu_id = ?";
-
-                try (PreparedStatement ingredientPs = conn.prepareStatement(ingredientSql)) {
-                    ingredientPs.setInt(1, kondate.getId());
-
-                    try (ResultSet ingredientRs = ingredientPs.executeQuery()) {
-                        List<String> ingredientList = new ArrayList<>();
-                        while (ingredientRs.next()) {
-                            ingredientList.add(ingredientRs.getString("ingredient_name"));
-                        }
-                        kondate.setIngredients(ingredientList);
-                    }
-                }
+                kondate = createKondateFromResultSet(rs, conn);
             }
 
         } catch (Exception e) {
@@ -108,15 +99,13 @@ public class KondateDAO {
         return kondate;
     }
 
-<<<<<<< HEAD
-    public Kondate chooseRandomKondateByDifficulty(int difficulty, String[] allergyIds) {
-=======
-    // ★修正：引数に List<Integer> recentIds を追加
-    public Kondate chooseRandomDifficultKondate(String[] allergyIds, List<Integer> recentIds) {
->>>>>>> refs/remotes/dish/master
+    public Kondate chooseRandomKondateByDifficulty(
+            int difficulty,
+            String[] allergyIds,
+            List<Integer> recentIds) {
 
         Kondate kondate = null;
-        StringBuilder sql = new StringBuilder(); // SQLを動的に組み立てるため StringBuilder に変更
+        StringBuilder sql = new StringBuilder();
 
         List<Integer> validAllergyIds = new ArrayList<>();
 
@@ -128,19 +117,8 @@ public class KondateDAO {
             }
         }
 
-        // --- アレルギー除外の条件組み立て ---
         if (validAllergyIds.isEmpty()) {
-<<<<<<< HEAD
-
-            sql =
-                "SELECT * FROM menus " +
-                "WHERE difficulty = ? " +
-                "ORDER BY RANDOM() " +
-                "LIMIT 1";
-
-=======
-            sql.append("SELECT * FROM menus WHERE difficulty = 3 ");
->>>>>>> refs/remotes/dish/master
+            sql.append("SELECT * FROM menus WHERE difficulty = ? ");
         } else {
             StringBuilder placeholders = new StringBuilder();
 
@@ -152,43 +130,33 @@ public class KondateDAO {
                 }
             }
 
-<<<<<<< HEAD
-            sql =
-                "SELECT DISTINCT m.* " +
-                "FROM menus m " +
-                "WHERE m.difficulty = ? " +
-                "AND m.menu_id NOT IN ( " +
-                "    SELECT mi.menu_id " +
-                "    FROM menu_ingredients mi " +
-                "    JOIN ingredient_allergens ia " +
-                "    ON mi.ingredient_id = ia.ingredient_id " +
-                "    WHERE ia.allergen_id IN (" + placeholders + ") " +
-                ") " +
-                "ORDER BY RANDOM() " +
-                "LIMIT 1";
-=======
-            sql.append("SELECT DISTINCT m.* FROM menus m WHERE m.difficulty = 3 ")
+            sql.append("SELECT DISTINCT m.* FROM menus m ")
+               .append("WHERE m.difficulty = ? ")
                .append("AND m.menu_id NOT IN ( ")
-               .append("    SELECT mi.menu_id FROM menu_ingredients mi ")
-               .append("    JOIN ingredient_allergens ia ON mi.ingredient_id = ia.ingredient_id ")
-               .append("    WHERE ia.allergen_id IN (").append(placeholders).append(") ")
+               .append("    SELECT mi.menu_id ")
+               .append("    FROM menu_ingredients mi ")
+               .append("    JOIN ingredient_allergens ia ")
+               .append("    ON mi.ingredient_id = ia.ingredient_id ")
+               .append("    WHERE ia.allergen_id IN (")
+               .append(placeholders)
+               .append(") ")
                .append(") ");
->>>>>>> refs/remotes/dish/master
         }
 
-        // ★【追加】直近に引いた料理のIDリスト（recentIds）があれば、それも除外する条件を追加
         if (recentIds != null && !recentIds.isEmpty()) {
-            sql.append(" AND menu_id NOT IN (");
+            sql.append("AND menu_id NOT IN (");
+
             for (int i = 0; i < recentIds.size(); i++) {
-                sql.append(recentIds.get(i));
+                sql.append("?");
+
                 if (i < recentIds.size() - 1) {
                     sql.append(",");
                 }
             }
+
             sql.append(") ");
         }
 
-        // 最後にランダムに並び替えて1件取得する
         sql.append("ORDER BY RANDOM() LIMIT 1");
 
         try (
@@ -196,46 +164,67 @@ public class KondateDAO {
             PreparedStatement ps = conn.prepareStatement(sql.toString());
         ) {
 
-            ps.setInt(1, difficulty);
+            int index = 1;
 
-            if (!validAllergyIds.isEmpty()) {
-                for (int i = 0; i < validAllergyIds.size(); i++) {
-                    ps.setInt(i + 2, validAllergyIds.get(i));
+            ps.setInt(index++, difficulty);
+
+            for (Integer allergyId : validAllergyIds) {
+                ps.setInt(index++, allergyId);
+            }
+
+            if (recentIds != null && !recentIds.isEmpty()) {
+                for (Integer recentId : recentIds) {
+                    ps.setInt(index++, recentId);
                 }
             }
 
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                kondate = new Kondate();
-                kondate.setId(rs.getInt("menu_id"));
-                kondate.setName(rs.getString("menu_name"));
-                kondate.setCalorie(rs.getInt("calorie"));
-                kondate.setDifficulty(rs.getInt("difficulty"));
-                kondate.setImageUrl(rs.getString("image_url"));
-
-                String ingredientSql =
-                    "SELECT i.ingredient_name " +
-                    "FROM ingredients i " +
-                    "JOIN menu_ingredients mi " +
-                    "ON i.ingredient_id = mi.ingredient_id " +
-                    "WHERE mi.menu_id = ?";
-
-                try (PreparedStatement ingredientPs = conn.prepareStatement(ingredientSql)) {
-                    ingredientPs.setInt(1, kondate.getId());
-
-                    try (ResultSet ingredientRs = ingredientPs.executeQuery()) {
-                        List<String> ingredientList = new ArrayList<>();
-                        while (ingredientRs.next()) {
-                            ingredientList.add(ingredientRs.getString("ingredient_name"));
-                        }
-                        kondate.setIngredients(ingredientList);
-                    }
-                }
+                kondate = createKondateFromResultSet(rs, conn);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        return kondate;
+    }
+
+    private Kondate createKondateFromResultSet(
+            ResultSet rs,
+            Connection conn) throws Exception {
+
+        Kondate kondate = new Kondate();
+
+        kondate.setId(rs.getInt("menu_id"));
+        kondate.setName(rs.getString("menu_name"));
+        kondate.setCalorie(rs.getInt("calorie"));
+        kondate.setDifficulty(rs.getInt("difficulty"));
+        kondate.setImageUrl(rs.getString("image_url"));
+
+        String ingredientSql =
+                "SELECT i.ingredient_name " +
+                "FROM ingredients i " +
+                "JOIN menu_ingredients mi " +
+                "ON i.ingredient_id = mi.ingredient_id " +
+                "WHERE mi.menu_id = ?";
+
+        try (PreparedStatement ingredientPs =
+                     conn.prepareStatement(ingredientSql)) {
+
+            ingredientPs.setInt(1, kondate.getId());
+
+            try (ResultSet ingredientRs = ingredientPs.executeQuery()) {
+                List<String> ingredientList = new ArrayList<>();
+
+                while (ingredientRs.next()) {
+                    ingredientList.add(
+                            ingredientRs.getString("ingredient_name"));
+                }
+
+                kondate.setIngredients(ingredientList);
+            }
         }
 
         return kondate;

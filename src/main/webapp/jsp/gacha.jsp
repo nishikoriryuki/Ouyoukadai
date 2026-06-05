@@ -409,7 +409,7 @@
             const rand = Math.random();
             const chanceAudio = document.getElementById('chance-audio');
 
-            if (rand < 0.03) {
+            if (rand < 0.40) {
 
                 console.log("★★★★確定");
 
@@ -430,7 +430,7 @@
                 document.getElementById("c1-top").setAttribute("fill", "#FEE9A0");
                 c1ColorElement.classList.add("gold-capsule");
 
-            } else if (rand < 0.13) {
+            } else if (rand < 0.80) {
 
                 console.log("★★★以上確定");
 
