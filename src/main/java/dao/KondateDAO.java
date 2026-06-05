@@ -108,13 +108,18 @@ public class KondateDAO {
         return kondate;
     }
 
+<<<<<<< HEAD
+    public Kondate chooseRandomKondateByDifficulty(int difficulty, String[] allergyIds) {
+=======
     // ★修正：引数に List<Integer> recentIds を追加
     public Kondate chooseRandomDifficultKondate(String[] allergyIds, List<Integer> recentIds) {
+>>>>>>> refs/remotes/dish/master
 
         Kondate kondate = null;
         StringBuilder sql = new StringBuilder(); // SQLを動的に組み立てるため StringBuilder に変更
 
         List<Integer> validAllergyIds = new ArrayList<>();
+
         if (allergyIds != null) {
             for (String idStr : allergyIds) {
                 if (idStr != null && !idStr.trim().isEmpty()) {
@@ -125,22 +130,50 @@ public class KondateDAO {
 
         // --- アレルギー除外の条件組み立て ---
         if (validAllergyIds.isEmpty()) {
+<<<<<<< HEAD
+
+            sql =
+                "SELECT * FROM menus " +
+                "WHERE difficulty = ? " +
+                "ORDER BY RANDOM() " +
+                "LIMIT 1";
+
+=======
             sql.append("SELECT * FROM menus WHERE difficulty = 3 ");
+>>>>>>> refs/remotes/dish/master
         } else {
             StringBuilder placeholders = new StringBuilder();
+
             for (int i = 0; i < validAllergyIds.size(); i++) {
                 placeholders.append("?");
+
                 if (i < validAllergyIds.size() - 1) {
                     placeholders.append(",");
                 }
             }
 
+<<<<<<< HEAD
+            sql =
+                "SELECT DISTINCT m.* " +
+                "FROM menus m " +
+                "WHERE m.difficulty = ? " +
+                "AND m.menu_id NOT IN ( " +
+                "    SELECT mi.menu_id " +
+                "    FROM menu_ingredients mi " +
+                "    JOIN ingredient_allergens ia " +
+                "    ON mi.ingredient_id = ia.ingredient_id " +
+                "    WHERE ia.allergen_id IN (" + placeholders + ") " +
+                ") " +
+                "ORDER BY RANDOM() " +
+                "LIMIT 1";
+=======
             sql.append("SELECT DISTINCT m.* FROM menus m WHERE m.difficulty = 3 ")
                .append("AND m.menu_id NOT IN ( ")
                .append("    SELECT mi.menu_id FROM menu_ingredients mi ")
                .append("    JOIN ingredient_allergens ia ON mi.ingredient_id = ia.ingredient_id ")
                .append("    WHERE ia.allergen_id IN (").append(placeholders).append(") ")
                .append(") ");
+>>>>>>> refs/remotes/dish/master
         }
 
         // ★【追加】直近に引いた料理のIDリスト（recentIds）があれば、それも除外する条件を追加
@@ -163,9 +196,11 @@ public class KondateDAO {
             PreparedStatement ps = conn.prepareStatement(sql.toString());
         ) {
 
+            ps.setInt(1, difficulty);
+
             if (!validAllergyIds.isEmpty()) {
                 for (int i = 0; i < validAllergyIds.size(); i++) {
-                    ps.setInt(i + 1, validAllergyIds.get(i));
+                    ps.setInt(i + 2, validAllergyIds.get(i));
                 }
             }
 
