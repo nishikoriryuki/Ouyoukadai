@@ -1,30 +1,41 @@
 function playGachaEffet(event) {
-    // 画面遷移をいったんストップ
     event.preventDefault();
-    
-    const audio = document.getElementById('gacha-audio');
+
+    const gachaAudio = document.getElementById('gacha-audio');
+    const chanceAudio = document.getElementById('chance-audio');
     const button = document.getElementById('gacha-button');
     const form = document.getElementById('gacha-form');
-    
-    // ボタンを無効化してテキストを変更
+
     if (button) {
         button.disabled = true;
-        button.innerText = "ガチャを回中...";
+        button.innerText = "ガチャを回し中...";
     }
-    
-    // 音を鳴らす
-    if (audio) {
-        audio.currentTime = 0;
-        audio.play().catch(error => {
-            console.log("再生エラー:", error);
-            form.submit();
-        });
-    } else {
-        form.submit();
+
+    const effectType = document.getElementById('effectType').value;
+
+    // 確定演出なら先バレ音
+    if (effectType === "ALL_EFFECTS" || effectType === "RANDOM_EFFECT") {
+        if (chanceAudio) {
+            chanceAudio.currentTime = 0;
+            chanceAudio.volume = 0.45;
+            chanceAudio.play().catch(error => {
+                console.log("先バレ音エラー:", error);
+            });
+        }
     }
-    
-    // 3秒待ってからサーブレットへ送信して画面切り替え
+
+    // 少し後にガチャ音
+    setTimeout(() => {
+        if (gachaAudio) {
+            gachaAudio.currentTime = 0;
+            gachaAudio.volume = 0.3;
+            gachaAudio.play().catch(error => {
+                console.log("ガチャ音エラー:", error);
+            });
+        }
+    }, 500);
+
     setTimeout(() => {
         form.submit();
-    }, 3000); 
+    }, 3000);
 }

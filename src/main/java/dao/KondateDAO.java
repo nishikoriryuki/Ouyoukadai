@@ -112,12 +112,13 @@ public class KondateDAO {
         return kondate;
     }
 
-    public Kondate chooseRandomDifficultKondate(String[] allergyIds) {
+    public Kondate chooseRandomKondateByDifficulty(int difficulty, String[] allergyIds) {
 
         Kondate kondate = null;
         String sql;
 
         List<Integer> validAllergyIds = new ArrayList<>();
+
         if (allergyIds != null) {
             for (String idStr : allergyIds) {
                 if (idStr != null && !idStr.trim().isEmpty()) {
@@ -130,15 +131,17 @@ public class KondateDAO {
 
             sql =
                 "SELECT * FROM menus " +
-                "WHERE difficulty = 3 " +
+                "WHERE difficulty = ? " +
                 "ORDER BY RANDOM() " +
                 "LIMIT 1";
 
         } else {
 
             StringBuilder placeholders = new StringBuilder();
+
             for (int i = 0; i < validAllergyIds.size(); i++) {
                 placeholders.append("?");
+
                 if (i < validAllergyIds.size() - 1) {
                     placeholders.append(",");
                 }
@@ -147,15 +150,14 @@ public class KondateDAO {
             sql =
                 "SELECT DISTINCT m.* " +
                 "FROM menus m " +
-                "WHERE m.difficulty = 3 " +
+                "WHERE m.difficulty = ? " +
                 "AND m.menu_id NOT IN ( " +
                 "    SELECT mi.menu_id " +
                 "    FROM menu_ingredients mi " +
                 "    JOIN ingredient_allergens ia " +
                 "    ON mi.ingredient_id = ia.ingredient_id " +
-                "    WHERE ia.allergen_id IN (" +
-                        placeholders +
-                ") ) " +
+                "    WHERE ia.allergen_id IN (" + placeholders + ") " +
+                ") " +
                 "ORDER BY RANDOM() " +
                 "LIMIT 1";
         }
@@ -165,9 +167,11 @@ public class KondateDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
         ) {
 
+            ps.setInt(1, difficulty);
+
             if (!validAllergyIds.isEmpty()) {
                 for (int i = 0; i < validAllergyIds.size(); i++) {
-                    ps.setInt(i + 1, validAllergyIds.get(i));
+                    ps.setInt(i + 2, validAllergyIds.get(i));
                 }
             }
 
@@ -180,8 +184,6 @@ public class KondateDAO {
                 kondate.setName(rs.getString("menu_name"));
                 kondate.setCalorie(rs.getInt("calorie"));
                 kondate.setDifficulty(rs.getInt("difficulty"));
-
-                // ⭐ ここも追加（画像URL）
                 kondate.setImageUrl(rs.getString("image_url"));
 
                 String ingredientSql =
