@@ -23,13 +23,15 @@ body{
 
 .intro{
 
-    font-size:56px;
+    font-size: clamp(24px, 7vw, 56px);
 
     font-weight:bold;
 
     color:white;
 
     margin-bottom:30px;
+    
+    text-align: center;
 
     opacity:0;
 
@@ -42,6 +44,15 @@ body{
         0 0 10px rgba(255,255,255,0.8),
         0 0 25px rgba(255,255,255,0.6),
         0 0 45px rgba(255,255,255,0.4);
+        
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    width: 100%;
+    max-width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 @keyframes titleAppear{
@@ -135,7 +146,7 @@ body{
 
 .kondate_name p{
 
-    font-size:28px;
+    font-size: clamp(18px, 5vw, 28px);
 
     font-weight:bold;
 
@@ -143,6 +154,10 @@ body{
 
     text-shadow:
         0 0 10px rgba(255,107,107,0.4);
+        
+    white-space: nowrap;      /* 改行しない */
+    overflow: hidden;         /* はみ出しを隠す */
+    text-overflow: ellipsis;  /* ...を表示 */
 }
 
 /* =========================
