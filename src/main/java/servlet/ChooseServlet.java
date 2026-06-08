@@ -132,46 +132,17 @@ public class ChooseServlet extends HttpServlet {
 
         if (kondate != null) {
 
-            if (kondate != null) {
+            System.out.println("========== ガチャ結果 ==========");
 
-                System.out.println("========== ガチャ結果 ==========");
+            System.out.println("当選ID: " + kondate.getId());
+            System.out.println("当選料理: " + kondate.getName());
+            System.out.println("難易度: " + kondate.getDifficulty());
+            System.out.println("除外されていたID: " + gachaLog.getRecentIds());
+            System.out.println("effectType: " + effectType);
+            System.out.println("fixedDifficulty: " + fixedDifficultyParam);
 
-                System.out.println(
-                        "当選ID: "
-                        + kondate.getId());
-
-                System.out.println(
-                        "当選料理: "
-                        + kondate.getName());
-
-                System.out.println(
-                        "難易度: "
-                        + kondate.getDifficulty());
-
-                System.out.println(
-                        "除外されていたID: "
-                        + gachaLog.getRecentIds());
-
-                System.out.println(
-                        "effectType: "
-                        + effectType);
-
-                System.out.println(
-                        "fixedDifficulty: "
-                        + fixedDifficultyParam);
-
-                System.out.println("===============================");
-
-                gachaLog.saveToDatabase(
-                        userId,
-                        kondate.getId(),
-                        kondate.getName());
-
-            } else {
-
-                System.out.println(
-                        "該当する献立が完全にありませんでした。");
-            }
+            System.out.println("===============================");
+            System.out.println("");
 
             // 当選した料理をDBへ保存
             gachaLog.saveToDatabase(
@@ -181,6 +152,7 @@ public class ChooseServlet extends HttpServlet {
             );
 
         } else {
+
             System.out.println("該当する献立が完全にありませんでした。");
         }
 

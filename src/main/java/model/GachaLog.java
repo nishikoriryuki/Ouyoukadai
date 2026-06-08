@@ -41,54 +41,45 @@ public class GachaLog implements Serializable {
 
     private void loadFromDatabase(int userId) {
 
-        // SQLite用に最新2件を取得するクエリ
-
-        String sql = 
-
+        String sql =
             "SELECT gl.menu_id, m.menu_name " +
-
             "FROM gacha_logs gl " +
-
             "JOIN menus m ON gl.menu_id = m.menu_id " +
-
             "WHERE gl.user_id = ? " +
+            "ORDER BY gl.log_id DESC";
 
-            "ORDER BY gl.drawn_at DESC " +
-
-            "LIMIT ?";
- 
         try (
-
             Connection conn = DBUtil.getConnection();
-
             PreparedStatement ps = conn.prepareStatement(sql);
-
         ) {
 
             ps.setInt(1, userId);
 
-            ps.setInt(2, MAX_HISTORY);
- 
             try (ResultSet rs = ps.executeQuery()) {
 
                 while (rs.next()) {
 
-                    // 最新順(降順)で取得されるため、古いものが先頭にくるように0番目に追加していく
+                    int menuId = rs.getInt("menu_id");
+                    String menuName = rs.getString("menu_name");
 
-                    recentIds.add(0, rs.getInt("menu_id"));
+                    // すでに同じIDが入っていたらスキップ
+                    if (recentIds.contains(menuId)) {
+                        continue;
+                    }
 
-                    recentNames.add(0, rs.getString("menu_name"));
+                    recentIds.add(0, menuId);
+                    recentNames.add(0, menuName);
 
+                    // 重複なしで2件集まったら終了
+                    if (recentIds.size() >= MAX_HISTORY) {
+                        break;
+                    }
                 }
-
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
-
     }
  
    /**
@@ -105,23 +96,15 @@ public class GachaLog implements Serializable {
 
         // 「自分の履歴のうち、最新の2件のdrawn_at」よりも古い日時のデータを削除します
 
-        String deleteSql = 
-
-            "DELETE FROM gacha_logs " +
-
-            "WHERE user_id = ? " +
-
-            "AND drawn_at < IFNULL((" +
-
-            "    SELECT drawn_at FROM gacha_logs " +
-
-            "    WHERE user_id = ? " +
-
-            "    ORDER BY drawn_at DESC " +
-
-            "    LIMIT 1 OFFSET 1" + // 最新から2番目の日取りを取得
-
-            "), '1970-01-01 00:00:00')";
+        String deleteSql =
+                "DELETE FROM gacha_logs " +
+                "WHERE user_id = ? " +
+                "AND log_id NOT IN ( " +
+                "    SELECT log_id FROM gacha_logs " +
+                "    WHERE user_id = ? " +
+                "    ORDER BY log_id DESC " +
+                "    LIMIT ? " +
+                ")";
  
         try (Connection conn = DBUtil.getConnection()) {
 
@@ -141,13 +124,15 @@ public class GachaLog implements Serializable {
 
             }
  
-            // 2. ★【追加】最新2件を残して古いデータを削除
+            // 2. 最新2件を残して古いデータを削除
 
             try (PreparedStatement psDelete = conn.prepareStatement(deleteSql)) {
 
                 psDelete.setInt(1, userId);
 
                 psDelete.setInt(2, userId);
+
+                psDelete.setInt(3, MAX_HISTORY);
 
                 psDelete.executeUpdate();
 
