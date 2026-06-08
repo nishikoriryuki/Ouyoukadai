@@ -83,35 +83,45 @@
         
             z-index: 999;
         
-            padding: 12px 30px;
+            padding: 14px 42px;
         
-            font-size: 42px;
-            font-weight: bold;
-            letter-spacing: 3px;
+            font-size: 46px;
+            font-weight: 900;
+            letter-spacing: 6px;
         
             color: #fff;
         
-            background: linear-gradient(
-                135deg,
-                #B67B03 0%,
-                #DAAF08 35%,
-                #FEE9A0 50%,
-                #DAAF08 65%,
-                #B67B03 100%
-            );
+            background:
+                radial-gradient(circle at 50% 35%, #fff7b0 0%, transparent 35%),
+                linear-gradient(135deg,
+                    #7a0000 0%,
+                    #ff0000 20%,
+                    #ffcc00 45%,
+                    #ffffff 50%,
+                    #ffcc00 55%,
+                    #ff0000 80%,
+                    #7a0000 100%
+                );
         
-            border: 4px solid #fff7c2;
-            border-radius: 50px;
+            border: 5px solid #fff2a8;
+            border-radius: 12px;
         
             box-shadow:
-                0 0 10px #FEE9A0,
-                0 0 20px #DAAF08,
-                0 0 35px rgba(254,233,160,0.8);
+                0 0 8px #fff,
+                0 0 18px #ffcc00,
+                0 0 35px #ff0000,
+                0 0 60px rgba(255, 0, 0, 0.9);
         
             text-shadow:
-                2px 2px 3px rgba(0,0,0,0.5);
+                3px 3px 0 #8b0000,
+                -2px -2px 0 #ffcc00,
+                0 0 12px #fff,
+                0 0 24px #ff0000;
         
-            animation: chanceBanner 0.8s ease-out forwards;
+            animation:
+                pachinkoAppear 0.45s ease-out forwards,
+                pachinkoFlash 0.18s infinite alternate,
+                pachinkoShake 0.12s infinite;
         }
         
         .kakutei-text.show {
@@ -120,45 +130,86 @@
         
         .kakutei-text::before {
             content: "";
-        
             position: absolute;
-            top: -50%;
-            left: -30%;
+            top: -80%;
+            left: -40%;
         
-            width: 30%;
-            height: 200%;
+            width: 35%;
+            height: 260%;
         
-            background: rgba(255,255,255,0.5);
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.9),
+                transparent
+            );
         
             transform: rotate(25deg);
-        
-            animation: shine 1.5s infinite;
+            animation: pachinkoShine 0.8s infinite;
         }
         
-        @keyframes shine {
-            from {
-                left: -30%;
-            }
-            to {
-                left: 130%;
-            }
-        }
-        
-        @keyframes chanceBanner {
-        
+        @keyframes pachinkoAppear {
             0% {
                 opacity: 0;
-                transform: translateX(-50%) translateY(-40px);
+                transform: translateX(-50%) scale(4) rotate(-8deg);
+                filter: blur(8px);
             }
         
             60% {
                 opacity: 1;
-                transform: translateX(-50%) translateY(10px);
+                transform: translateX(-50%) scale(0.85) rotate(4deg);
+                filter: blur(0);
+            }
+        
+            80% {
+                transform: translateX(-50%) scale(1.15) rotate(-2deg);
             }
         
             100% {
                 opacity: 1;
-                transform: translateX(-50%) translateY(0);
+                transform: translateX(-50%) scale(1) rotate(0);
+            }
+        }
+        
+        @keyframes pachinkoFlash {
+            from {
+                filter: brightness(1);
+            }
+        
+            to {
+                filter: brightness(1.8);
+            }
+        }
+        
+        @keyframes pachinkoShake {
+            0% {
+                margin-left: 0;
+            }
+        
+            25% {
+                margin-left: -2px;
+            }
+        
+            50% {
+                margin-left: 2px;
+            }
+        
+            75% {
+                margin-left: -1px;
+            }
+        
+            100% {
+                margin-left: 0;
+            }
+        }
+        
+        @keyframes pachinkoShine {
+            from {
+                left: -40%;
+            }
+        
+            to {
+                left: 140%;
             }
         }
     </style>
@@ -186,7 +237,7 @@
 
     <section class="wrapper" id="gacha-wrapper">
     
-        <div id="kakutei-text" class="kakutei-text">★CHANCE★</div>
+        <div id="kakutei-text" class="kakutei-text">確定!!</div>
         <div class="toy-wrap">
             <div class="toy">
                 <svg viewBox="0 0 420 600" width="100%" height="100%">
@@ -409,7 +460,7 @@
             const rand = Math.random();
             const chanceAudio = document.getElementById('chance-audio');
 
-            if (rand < 0.40) {
+            if (rand < 0.99) {
 
                 console.log("★★★★確定");
 
@@ -430,7 +481,7 @@
                 document.getElementById("c1-top").setAttribute("fill", "#FEE9A0");
                 c1ColorElement.classList.add("gold-capsule");
 
-            } else if (rand < 0.80) {
+            } else if (rand < 0.09) {
 
                 console.log("★★★以上確定");
 
