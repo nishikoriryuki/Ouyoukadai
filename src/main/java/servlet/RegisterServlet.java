@@ -13,27 +13,38 @@ import model.User;
 
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doPost(
             HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        // リクエストの文字コードを設定
         request.setCharacterEncoding("UTF-8");
 
+        // 入力されたユーザー情報を取得
         String userName =
                 request.getParameter("userName");
 
         String password =
                 request.getParameter("password");
 
+        // Userオブジェクトを生成
         User user =
-                new User(0, userName, password);
+                new User(
+                        0,
+                        userName,
+                        password);
 
-        UserDAO dao =
-                new UserDAO();
-        
+        UserDAO dao = new UserDAO();
+
+        // =========================
+        // ユーザー名重複チェック
+        // =========================
+
         if (dao.existsUserName(userName)) {
 
             request.setAttribute(
@@ -47,14 +58,30 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
+        // =========================
+        // ユーザー登録処理
+        // =========================
+
         boolean result =
                 dao.insertUser(user);
 
+        // =========================
+        // 登録成功
+        // =========================
+
         if (result) {
+
+            // ログイン画面へ遷移
             response.sendRedirect(
                     request.getContextPath()
                     + "/jsp/login.jsp");
+
         } else {
+
+            // =========================
+            // 登録失敗
+            // =========================
+
             request.setAttribute(
                     "errorMsg",
                     "ユーザー登録に失敗しました");

@@ -1,5 +1,5 @@
 package model;
- 
+
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,49 +8,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.DBUtil;
- 
+
 /**
-
-* ガチャの直近履歴をデータベース(gacha_logs)で永続管理するクラス
-
-*/
-
+ * ガチャの直近履歴を
+ * データベース（gacha_logs）で管理するクラス
+ */
 public class GachaLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final int MAX_HISTORY = 2; // 直近2件まで保持
- 
+    // 直近2件まで保持
+    private static final int MAX_HISTORY = 2;
+
     private List<Integer> recentIds = new ArrayList<>();
-
     private List<String> recentNames = new ArrayList<>();
- 
-    // コンストラクタ：インスタンス生成時にデータベースから直近2件を読み込む
 
+    /**
+     * コンストラクタ
+     *
+     * インスタンス生成時に、
+     * 指定ユーザーの直近履歴をデータベースから読み込む
+     */
     public GachaLog(int userId) {
 
         loadFromDatabase(userId);
-
     }
- 
+
     /**
-
-     * データベースから指定ユーザーの最新2件の履歴を読み込む
-
+     * データベースから
+     * 指定ユーザーの最新2件の履歴を読み込む
      */
-
     private void loadFromDatabase(int userId) {
 
         String sql =
-            "SELECT gl.menu_id, m.menu_name " +
-            "FROM gacha_logs gl " +
-            "JOIN menus m ON gl.menu_id = m.menu_id " +
-            "WHERE gl.user_id = ? " +
-            "ORDER BY gl.log_id DESC";
+                "SELECT gl.menu_id, m.menu_name " +
+                "FROM gacha_logs gl " +
+                "JOIN menus m ON gl.menu_id = m.menu_id " +
+                "WHERE gl.user_id = ? " +
+                "ORDER BY gl.log_id DESC";
 
         try (
             Connection conn = DBUtil.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql)
         ) {
 
             ps.setInt(1, userId);
@@ -59,10 +58,13 @@ public class GachaLog implements Serializable {
 
                 while (rs.next()) {
 
-                    int menuId = rs.getInt("menu_id");
-                    String menuName = rs.getString("menu_name");
+                    int menuId =
+                            rs.getInt("menu_id");
 
-                    // すでに同じIDが入っていたらスキップ
+                    String menuName =
+                            rs.getString("menu_name");
+
+                    // すでに同じ献立IDがある場合はスキップ
                     if (recentIds.contains(menuId)) {
                         continue;
                     }
@@ -78,24 +80,27 @@ public class GachaLog implements Serializable {
             }
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
- 
-   /**
 
-     * 新しい履歴をデータベースに保存し、最新2件を残して古いログを自動で削除する
-
+    /**
+     * 新しい履歴をデータベースに保存する
+     *
+     * 保存後、最新2件を残して
+     * 古い履歴は削除する
      */
+    public void saveToDatabase(
+            int userId,
+            int menuId,
+            String menuName) {
 
-    public void saveToDatabase(int userId, int menuId, String menuName) {
+        String insertSql =
+                "INSERT INTO gacha_logs (user_id, menu_id) " +
+                "VALUES (?, ?)";
 
-        String insertSql = "INSERT INTO gacha_logs (user_id, menu_id) VALUES (?, ?)";
-
-        // ★SQLiteで動く「最新2件以外を削除する」SQL
-
-        // 「自分の履歴のうち、最新の2件のdrawn_at」よりも古い日時のデータを削除します
-
+        // 最新2件以外の履歴を削除するSQL
         String deleteSql =
                 "DELETE FROM gacha_logs " +
                 "WHERE user_id = ? " +
@@ -105,85 +110,93 @@ public class GachaLog implements Serializable {
                 "    ORDER BY log_id DESC " +
                 "    LIMIT ? " +
                 ")";
- 
+
         try (Connection conn = DBUtil.getConnection()) {
 
-            // 自動コミットをオフにして、追加と削除をセット（トランザクション）で行う
-
+            // 追加と削除をまとめて実行するため、
+            // 自動コミットをオフにする
             conn.setAutoCommit(false);
- 
-            // 1. 新しい履歴の追加
 
-            try (PreparedStatement psInsert = conn.prepareStatement(insertSql)) {
+            // =========================
+            // 1. 新しい履歴を追加
+            // =========================
+
+            try (
+                PreparedStatement psInsert =
+                        conn.prepareStatement(insertSql)
+            ) {
 
                 psInsert.setInt(1, userId);
-
                 psInsert.setInt(2, menuId);
 
                 psInsert.executeUpdate();
-
             }
- 
-            // 2. 最新2件を残して古いデータを削除
 
-            try (PreparedStatement psDelete = conn.prepareStatement(deleteSql)) {
+            // =========================
+            // 2. 古い履歴を削除
+            // =========================
+
+            try (
+                PreparedStatement psDelete =
+                        conn.prepareStatement(deleteSql)
+            ) {
 
                 psDelete.setInt(1, userId);
-
                 psDelete.setInt(2, userId);
-
                 psDelete.setInt(3, MAX_HISTORY);
 
                 psDelete.executeUpdate();
-
             }
- 
-            // 確定
 
+            // 追加と削除を確定
             conn.commit();
- 
-            // メモリ上のアレイリストも最新状態に追従
 
+            // メモリ上の履歴も更新
             recentIds.add(menuId);
-
             recentNames.add(menuName);
 
             if (recentIds.size() > 2) {
 
                 recentIds.remove(0);
-
                 recentNames.remove(0);
-
             }
 
         } catch (Exception e) {
 
             e.printStackTrace();
-
         }
-
     }
 
+    /**
+     * 直近で排出された献立IDリストを取得する
+     */
     public List<Integer> getRecentIds() {
 
         return this.recentIds;
-
     }
- 
+
+    /**
+     * 直近で排出された献立名リストを取得する
+     */
     public List<String> getRecentNames() {
 
         return this.recentNames;
-
     }
-    
+
+    /**
+     * 指定ユーザーのガチャ履歴を
+     * データベースとメモリ上の両方から削除する
+     */
     public void clearDatabaseLog(int userId) {
 
-        String sql = "DELETE FROM gacha_logs WHERE user_id = ?";
+        String sql =
+                "DELETE FROM gacha_logs WHERE user_id = ?";
 
         try (
             Connection conn = DBUtil.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql)
         ) {
+
             ps.setInt(1, userId);
             ps.executeUpdate();
 
@@ -191,10 +204,8 @@ public class GachaLog implements Serializable {
             recentNames.clear();
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
-
 }
-
- 
