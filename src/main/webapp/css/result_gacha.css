@@ -134,33 +134,6 @@ body{
 }
 
 /* =========================
-   タイトル
-========================= */
-
-.kondate_name{
-
-    text-align:center;
-
-    margin-bottom:20px;
-}
-
-.kondate_name p{
-
-    font-size: clamp(18px, 5vw, 28px);
-
-    font-weight:bold;
-
-    color:#ff6b6b;
-
-    text-shadow:
-        0 0 10px rgba(255,107,107,0.4);
-        
-    white-space: nowrap;      /* 改行しない */
-    overflow: hidden;         /* はみ出しを隠す */
-    text-overflow: ellipsis;  /* ...を表示 */
-}
-
-/* =========================
    各項目
 ========================= */
 
@@ -380,6 +353,71 @@ body.super-hard-bg{
 
     animation:
         titleAppear 1.5s forwards;
+}
+
+.rarity-stars.ssr {
+
+    background: linear-gradient(
+        90deg,
+        #ff0000,
+        #ff8800,
+        #ffff00,
+        #00ff00,
+        #00ffff,
+        #0066ff,
+        #aa00ff,
+        #ff00aa,
+        #ff0000
+    );
+
+    background-size: 400% 100%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+
+    /* 文字を見やすくする白フチ */
+    -webkit-text-stroke: 1.5px rgba(255,255,255,0.9);
+
+    /* 発光は虹色を邪魔しない程度 */
+    filter:
+        drop-shadow(0 0 3px #fff)
+        drop-shadow(0 0 8px #ff0)
+        drop-shadow(0 0 15px #f0f);
+
+    animation:
+        titleAppear 1.5s forwards,
+        rainbowMove 0.8s linear infinite,
+        jackpotFlash 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes rainbowMove {
+
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 400% 50%;
+    }
+}
+
+@keyframes jackpotFlash {
+
+    from {
+        filter:
+            drop-shadow(0 0 3px #fff)
+            drop-shadow(0 0 8px #ff0)
+            drop-shadow(0 0 15px #f0f);
+    }
+
+    to {
+        filter:
+            drop-shadow(0 0 6px #fff)
+            drop-shadow(0 0 15px #ff0)
+            drop-shadow(0 0 30px #f0f);
+    }
 }
 
 @keyframes ssrGlow {

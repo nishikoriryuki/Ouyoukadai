@@ -1,56 +1,69 @@
 body {
     margin: 0;
     padding: 0;
-    background: linear-gradient(
-        135deg,
-        #ffecd2,
-        #fcb69f
-    );
 
-    font-family: "Yu Gothic", sans-serif;
+    height: 100vh;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    height: 100vh;
+    font-family: "Yu Gothic", sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffecd2,
+            #fcb69f
+        );
 }
 
-.login-container {
 
+/* =========================
+   ログイン画面コンテナ
+========================= */
+
+.login-container {
     width: 400px;
+
+    padding: 40px;
+
+    text-align: center;
 
     background: white;
 
     border-radius: 20px;
 
-    padding: 40px;
-
     box-shadow:
-        0 10px 30px rgba(0,0,0,0.2);
-
-    text-align: center;
+        0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
+
+/* =========================
+   タイトル
+========================= */
+
 .login-title {
+    margin-bottom: 30px;
 
     font-size: 32px;
     font-weight: bold;
 
     color: #ff6b6b;
-
-    margin-bottom: 30px;
 }
 
-.form-group {
 
+/* =========================
+   フォーム
+========================= */
+
+.form-group {
     margin-bottom: 20px;
 
     text-align: left;
 }
 
 .form-group label {
-
     display: block;
 
     margin-bottom: 8px;
@@ -59,44 +72,42 @@ body {
 }
 
 .form-group input {
-
     width: 100%;
 
     padding: 12px;
 
-    border: 2px solid #ddd;
-
-    border-radius: 10px;
-
     box-sizing: border-box;
 
     font-size: 16px;
+
+    border: 2px solid #ddd;
+    border-radius: 10px;
 }
 
 .form-group input:focus {
-
     outline: none;
 
     border-color: #ff6b6b;
 }
 
-.login-btn {
 
+/* =========================
+   ログインボタン
+========================= */
+
+.login-btn {
     width: 100%;
 
     padding: 15px;
 
-    border: none;
-
-    border-radius: 10px;
-
-    background: #ff6b6b;
+    font-size: 18px;
+    font-weight: bold;
 
     color: white;
+    background: #ff6b6b;
 
-    font-size: 18px;
-
-    font-weight: bold;
+    border: none;
+    border-radius: 10px;
 
     cursor: pointer;
 
@@ -104,19 +115,21 @@ body {
 }
 
 .login-btn:hover {
-
     background: #fa5252;
 
     transform: translateY(-2px);
 }
 
-.link-area {
 
+/* =========================
+   リンク
+========================= */
+
+.link-area {
     margin-top: 20px;
 }
 
 .link-area a {
-
     color: #ff6b6b;
 
     text-decoration: none;
