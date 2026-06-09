@@ -2,56 +2,68 @@ body {
     margin: 0;
     padding: 0;
 
-    background: linear-gradient(
-        135deg,
-        #e3fcef,
-        #b2f2bb
-    );
-
-    font-family: "Yu Gothic", sans-serif;
+    height: 100vh;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    height: 100vh;
+    font-family: "Yu Gothic", sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e3fcef,
+            #b2f2bb
+        );
 }
 
-.register-container {
 
+/* =========================
+   登録画面コンテナ
+========================= */
+
+.register-container {
     width: 400px;
+
+    padding: 40px;
+
+    text-align: center;
 
     background: white;
 
     border-radius: 20px;
 
-    padding: 40px;
-
     box-shadow:
-        0 10px 30px rgba(0,0,0,0.2);
-
-    text-align: center;
+        0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
+
+/* =========================
+   タイトル
+========================= */
+
 .register-title {
+    margin-bottom: 30px;
 
     font-size: 32px;
     font-weight: bold;
 
     color: #2f9e44;
-
-    margin-bottom: 30px;
 }
 
-.form-group {
 
+/* =========================
+   フォーム
+========================= */
+
+.form-group {
     margin-bottom: 20px;
 
     text-align: left;
 }
 
 .form-group label {
-
     display: block;
 
     margin-bottom: 8px;
@@ -62,44 +74,42 @@ body {
 }
 
 .form-group input {
-
     width: 100%;
 
     padding: 12px;
 
-    border: 2px solid #ddd;
-
-    border-radius: 10px;
-
     box-sizing: border-box;
 
     font-size: 16px;
+
+    border: 2px solid #ddd;
+    border-radius: 10px;
 }
 
 .form-group input:focus {
-
     outline: none;
 
     border-color: #51cf66;
 }
 
-.register-btn {
 
+/* =========================
+   登録ボタン
+========================= */
+
+.register-btn {
     width: 100%;
 
     padding: 15px;
 
-    border: none;
-
-    border-radius: 10px;
-
-    background: #51cf66;
+    font-size: 18px;
+    font-weight: bold;
 
     color: white;
+    background: #51cf66;
 
-    font-size: 18px;
-
-    font-weight: bold;
+    border: none;
+    border-radius: 10px;
 
     cursor: pointer;
 
@@ -107,27 +117,28 @@ body {
 }
 
 .register-btn:hover {
-
     background: #40c057;
 
     transform: translateY(-2px);
 }
 
-.link-area {
 
+/* =========================
+   リンク
+========================= */
+
+.link-area {
     margin-top: 20px;
 }
 
 .link-area a {
+    font-weight: bold;
 
     color: #2f9e44;
 
     text-decoration: none;
-
-    font-weight: bold;
 }
 
 .link-area a:hover {
-
     text-decoration: underline;
 }

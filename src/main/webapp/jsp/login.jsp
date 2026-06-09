@@ -1,67 +1,77 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ログイン</title>
+<%@ page language="java"
+    contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
 
-<link rel="stylesheet"
-      href="<%=request.getContextPath()%>/css/login.css">
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ログイン</title>
+
+    <link rel="stylesheet"
+          href="<%= request.getContextPath() %>/css/login.css">
 
 </head>
+
 <body>
 
-<div class="login-container">
+    <div class="login-container">
 
-    <div class="login-title">
-        🎲 今日の献立ガチャ
-    </div>
-    
-    <p style="color:red;">
-        ${errorMsg}
-    </p>
+        <div class="login-title">
+            🎲 今日の献立ガチャ
+        </div>
 
-    <form action="<%=request.getContextPath()%>/LoginServlet"
-          method="post">
+        <p style="color:red;">
+            ${errorMsg}
+        </p>
 
-        <div class="form-group">
+        <form action="<%= request.getContextPath() %>/LoginServlet"
+              method="post">
 
-            <label>ユーザー名</label>
+            <div class="form-group">
 
-            <input type="text"
-                   name="userName"
-                   required>
+                <label>ユーザー名</label>
+
+                <input type="text"
+                       name="userName"
+                       required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>パスワード</label>
+
+                <input type="password"
+                       name="password"
+                       required>
+
+            </div>
+
+            <button class="login-btn"
+                    type="submit">
+                ログイン
+            </button>
+
+        </form>
+
+        <div class="link-area">
+
+            <a href="<%= request.getContextPath() %>/jsp/register.jsp">
+                新規登録はこちら
+            </a>
 
         </div>
 
-        <div class="form-group">
-
-            <label>パスワード</label>
-
-            <input type="password"
-                   name="password"
-                   required>
-
-        </div>
-
-        <button class="login-btn"
-                type="submit">
-
-            ログイン
-        </button>
-
-    </form>
-
-    <div class="link-area">
-
-        <a href="<%=request.getContextPath()%>/jsp/register.jsp">
-            新規登録はこちら
-        </a>
-
     </div>
-
-</div>
 
 </body>
+
 </html>
