@@ -38,7 +38,7 @@
     <!-- 効果音 -->
     <audio
         id="gacha-audio"
-        src="${pageContext.request.contextPath}/audio/gacha.mp3"
+        src="${pageContext.request.contextPath}/audio/gacha.wav"
         preload="auto">
     </audio>
 
