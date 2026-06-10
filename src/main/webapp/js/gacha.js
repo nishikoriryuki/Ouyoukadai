@@ -1,4 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
+	
+	const preloadAudio =
+	        document.getElementById("gacha-audio");
+
+	    if (preloadAudio) {
+
+	        preloadAudio.muted = true;
+
+	        preloadAudio.play()
+	            .then(function () {
+	                preloadAudio.pause();
+	                preloadAudio.currentTime = 0;
+	                preloadAudio.muted = false;
+	            })
+	            .catch(function () {});
+	    }
 
     function showKakuteiText() {
         const kakuteiText = document.getElementById("kakutei-text");
@@ -126,16 +142,24 @@ document.addEventListener("DOMContentLoaded", function () {
         // ガチャ本体の回転
         document.getElementById("gacha-wrapper").classList.add("act");
 
-        // ガチャ音
-        setTimeout(function () {
-            if (gachaAudio) {
-                gachaAudio.currentTime = 0.2;
-                gachaAudio.volume = 0.3;
-                gachaAudio.play().catch(function (error) {
-                    console.log("ガチャ音エラー:", error);
-                });
-            }
-        }, 500);
+		// ガチャ音
+		if (gachaAudio) {
+
+		    console.log("play前");
+
+		    gachaAudio.addEventListener("play", function () {
+		        console.log("再生開始");
+		    }, { once: true });
+
+		    gachaAudio.currentTime = 0;
+		    gachaAudio.volume = 0.3;
+
+		    gachaAudio.play().then(function () {
+		        console.log("play成功");
+		    }).catch(function (error) {
+		        console.log("ガチャ音エラー:", error);
+		    });
+		}
 
         // 3秒後に送信
         setTimeout(function () {
@@ -143,13 +167,22 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 3000);
     }
 
-    function playChanceAudio(chanceAudio) {
-        if (chanceAudio) {
-            chanceAudio.currentTime = 0;
-            chanceAudio.volume = 0.45;
-            chanceAudio.play().catch(function (error) {
-                console.log("先バレ音エラー:", error);
-            });
-        }
-    }
+	function playChanceAudio(chanceAudio) {
+
+	    const toyWrap = document.querySelector(".toy-wrap");
+
+	    if (toyWrap) {
+	        toyWrap.classList.remove("chance-pulse");
+	        void toyWrap.offsetWidth;
+	        toyWrap.classList.add("chance-pulse");
+	    }
+
+	    if (chanceAudio) {
+	        chanceAudio.currentTime = 0;
+	        chanceAudio.volume = 0.45;
+	        chanceAudio.play().catch(function (error) {
+	            console.log("先バレ音エラー:", error);
+	        });
+	    }
+	}
 });
