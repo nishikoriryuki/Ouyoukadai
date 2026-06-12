@@ -168,6 +168,10 @@ body{
         itemFade 0.8s forwards;
 }
 
+.kondate_difficulty {
+    text-align: center;
+}
+
 /* 順番に表示 */
 
 .kondate_ingredient{
