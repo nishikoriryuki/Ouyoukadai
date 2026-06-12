@@ -122,6 +122,9 @@ body {
 .kakutei-text {
     display: none;
     overflow: hidden;
+    
+    white-space: nowrap;
+    box-sizing: border-box;
 
     position: absolute;
     top: 80px;
@@ -300,5 +303,16 @@ body {
 
     .sidebar.open {
         right: 0;
+    }
+    
+    .kakutei-text {
+        white-space: nowrap;
+
+        max-width: calc(100vw - 24px);
+
+        padding: 12px 28px;
+
+        font-size: clamp(30px, 10vw, 46px);
+        letter-spacing: 3px;
     }
 }
