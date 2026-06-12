@@ -23,7 +23,7 @@ body{
 
 .intro{
 
-    font-size: clamp(28px, 8vw, 56px);
+    font-size: clamp(24px, 7vw, 56px);
 
     font-weight:bold;
 
@@ -73,39 +73,40 @@ body{
     }
 }
 
+@media screen and (max-width: 768px) {
+
+    .intro {
+        font-size: clamp(32px, 9vw, 48px);
+    }
+
+}
+
 /* =========================
    カード本体
 ========================= */
 
-.card{
+.card {
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    box-sizing: border-box;
 
-    width:360px;
-
-    background:rgba(255,255,255,0.85);
-
+    background: rgba(255,255,255,0.85);
     backdrop-filter: blur(10px);
-
-    border-radius:25px;
-
-    padding:25px;
+    border-radius: 25px;
+    padding: 25px;
 
     box-shadow:
         0 10px 30px rgba(0,0,0,0.2),
         0 0 20px rgba(255,255,255,0.6);
 
-    border:3px solid rgba(255,255,255,0.7);
+    border: 3px solid rgba(255,255,255,0.7);
+    transition: 0.3s;
 
-    transition:0.3s;
+    opacity: 0;
+    transform: translateY(50px);
 
-    /* 最初は隠す */
-    opacity:0;
-
-    transform:translateY(50px);
-
-    animation:
-        cardReveal 1s forwards;
-
-    animation-delay:2s;
+    animation: cardReveal 1s forwards;
+    animation-delay: 2s;
 }
 
 @keyframes cardReveal{
@@ -131,6 +132,15 @@ body{
     box-shadow:
         0 20px 40px rgba(0,0,0,0.25),
         0 0 30px rgba(255,255,255,0.9);
+}
+
+@media screen and (max-width: 768px) {
+
+    .card {
+        width: calc(100vw - 32px);
+        padding: 20px;
+    }
+
 }
 
 /* =========================
