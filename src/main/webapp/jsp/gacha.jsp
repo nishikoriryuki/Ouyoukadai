@@ -26,6 +26,9 @@
         content="width=device-width, initial-scale=1.0">
 
     <title>今日の献立ガチャ</title>
+    
+    <link rel="apple-touch-icon"
+      href="<%=request.getContextPath()%>/images/app_icon.png">
 
     <link rel="stylesheet" href="../css/style.css?v=2">
     <link rel="stylesheet" href="../css/gacha.css">
